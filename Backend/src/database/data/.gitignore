@@ -1,0 +1,8 @@
+# Ignorar todos os arquivos de banco de dados
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Manter o diretório no git
+!.gitignore

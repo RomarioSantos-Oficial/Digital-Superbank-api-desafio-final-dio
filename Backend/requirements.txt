@@ -1,0 +1,25 @@
+# FastAPI e Server
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy>=2.0.36
+alembic==1.13.1
+
+# Pydantic & Validation
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+email-validator>=2.0.0
+
+# Autenticação e Segurança
+python-jose[cryptography]==3.3.0
+passlib==1.7.4
+bcrypt==4.0.1
+
+# Utilitários
+python-dateutil==2.8.2
+pytz==2023.3
+
+# CORS
+python-dotenv==1.0.0
