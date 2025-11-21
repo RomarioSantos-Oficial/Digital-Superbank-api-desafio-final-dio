@@ -20,63 +20,107 @@ const NotificationBell = () => {
       const token = localStorage.getItem('auth_token');
       if (!token) return;
 
-      // Simular notificações (você pode criar uma API real depois)
-      const mockNotifications = [
-        {
-          id: 1,
-          type: 'transaction',
-          title: 'Transferência recebida',
-          message: 'Você recebeu R$ 500,00',
-          timestamp: new Date(Date.now() - 1000 * 60 * 5),
-          read: false,
-          icon: IoWallet,
-          color: 'green'
-        },
-        {
-          id: 2,
-          type: 'investment',
-          title: 'Investimento concluído',
-          message: 'Sua compra de PETR4 foi processada',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30),
-          read: false,
-          icon: IoCheckmark,
-          color: 'blue'
-        },
-        {
-          id: 3,
-          type: 'reminder',
-          title: 'Fatura próxima do vencimento',
-          message: 'Sua fatura vence em 3 dias',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-          read: true,
-          icon: IoTime,
-          color: 'yellow'
-        }
-      ];
+      // Carregar notificações persistidas do localStorage
+      const savedNotifications = localStorage.getItem('notifications');
+      
+      if (savedNotifications) {
+        // Se já existem notificações salvas, usar elas
+        const parsed = JSON.parse(savedNotifications);
+        // Converter timestamps de string para Date
+        const notificationsWithDates = parsed.map(n => ({
+          ...n,
+          timestamp: new Date(n.timestamp),
+          icon: n.type === 'transaction' ? IoWallet : 
+                n.type === 'investment' ? IoCheckmark : IoTime
+        }));
+        setNotifications(notificationsWithDates);
+        setUnreadCount(notificationsWithDates.filter(n => !n.read).length);
+      } else {
+        // Primeira vez: criar notificações iniciais
+        const mockNotifications = [
+          {
+            id: Date.now() + 1,
+            type: 'transaction',
+            title: 'Transferência recebida',
+            message: 'Você recebeu R$ 500,00',
+            timestamp: new Date(Date.now() - 1000 * 60 * 5),
+            read: false,
+            icon: IoWallet,
+            color: 'green'
+          },
+          {
+            id: Date.now() + 2,
+            type: 'investment',
+            title: 'Investimento concluído',
+            message: 'Sua compra de PETR4 foi processada',
+            timestamp: new Date(Date.now() - 1000 * 60 * 30),
+            read: false,
+            icon: IoCheckmark,
+            color: 'blue'
+          },
+          {
+            id: Date.now() + 3,
+            type: 'reminder',
+            title: 'Fatura próxima do vencimento',
+            message: 'Sua fatura vence em 3 dias',
+            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
+            read: false,
+            icon: IoTime,
+            color: 'yellow'
+          }
+        ];
 
-      setNotifications(mockNotifications);
-      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+        // Salvar no localStorage
+        const toSave = mockNotifications.map(n => ({
+          ...n,
+          icon: undefined, // Não salvar função no localStorage
+          timestamp: n.timestamp.toISOString()
+        }));
+        localStorage.setItem('notifications', JSON.stringify(toSave));
+
+        setNotifications(mockNotifications);
+        setUnreadCount(mockNotifications.filter(n => !n.read).length);
+      }
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
     }
   };
 
+  // Função para salvar notificações no localStorage
+  const saveNotifications = (notifs) => {
+    const toSave = notifs.map(n => ({
+      id: n.id,
+      type: n.type,
+      title: n.title,
+      message: n.message,
+      timestamp: n.timestamp.toISOString(),
+      read: n.read,
+      color: n.color
+    }));
+    localStorage.setItem('notifications', JSON.stringify(toSave));
+  };
+
   const markAsRead = (id) => {
-    setNotifications(prev =>
-      prev.map(notif =>
-        notif.id === id ? { ...notif, read: true } : notif
-      )
+    const updated = notifications.map(notif =>
+      notif.id === id ? { ...notif, read: true } : notif
     );
+    setNotifications(updated);
+    saveNotifications(updated);
     setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
   const markAllAsRead = () => {
-    setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+    const updated = notifications.map(notif => ({ ...notif, read: true }));
+    setNotifications(updated);
+    saveNotifications(updated);
     setUnreadCount(0);
   };
 
   const deleteNotification = (id) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== id));
+    const updated = notifications.filter(notif => notif.id !== id);
+    setNotifications(updated);
+    saveNotifications(updated);
+    
     const notif = notifications.find(n => n.id === id);
     if (notif && !notif.read) {
       setUnreadCount(prev => Math.max(0, prev - 1));
@@ -210,6 +254,7 @@ const NotificationBell = () => {
                     onClick={() => {
                       setNotifications([]);
                       setUnreadCount(0);
+                      localStorage.removeItem('notifications');
                     }}
                     className="text-xs text-gray-400 hover:text-white transition-colors w-full text-center"
                   >
