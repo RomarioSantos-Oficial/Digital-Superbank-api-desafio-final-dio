@@ -1,6 +1,3 @@
-"""
-Inicialização dos modelos - importa todos os modelos para uso
-"""
 from src.models.user import User, Address
 from src.models.account import Account, AccountType
 from src.models.transaction import (
