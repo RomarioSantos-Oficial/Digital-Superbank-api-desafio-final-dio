@@ -1,6 +1,3 @@
-"""
-Modelo de Transação
-"""
 from sqlalchemy import (
     Column, Integer, String, Float, DateTime, ForeignKey, Boolean,
     Enum as SQLEnum
@@ -26,7 +23,6 @@ class TransactionType(str, enum.Enum):
 
 
 class TransactionStatus(str, enum.Enum):
-    """Status da transação"""
     PENDING = "PENDING"
     COMPLETED = "COMPLETED"
     FAILED = "FAILED"
@@ -34,7 +30,6 @@ class TransactionStatus(str, enum.Enum):
 
 
 class Transaction(Base):
-    """Modelo de transação bancária"""
     __tablename__ = "transactions"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -58,7 +53,6 @@ class Transaction(Base):
 
 
 class ScheduledTransaction(Base):
-    """Modelo de transação agendada"""
     __tablename__ = "scheduled_transactions"
     
     id = Column(Integer, primary_key=True, index=True)

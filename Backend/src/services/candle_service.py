@@ -1,7 +1,3 @@
-"""
-Serviço de Simulação de Velas (Candlesticks) em Tempo Real
-Gera dados OHLCV realistas para análise técnica
-"""
 import random
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
@@ -10,10 +6,6 @@ import math
 
 
 class CandleSimulator:
-    """
-    Simulador de velas (candlesticks) com comportamento realista
-    Usa técnicas de random walk e volatilidade dinâmica
-    """
     
     def __init__(self):
         # Volatilidade por tipo de ativo (desvio padrão) - REDUZIDA
@@ -38,17 +30,6 @@ class CandleSimulator:
         asset_type: AssetType,
         time_elapsed: int = 60  # segundos
     ) -> dict:
-        """
-        Gera movimento de preço realista usando random walk
-        
-        Args:
-            current_price: Preço atual do ativo
-            asset_type: Tipo do ativo (STOCK ou FUND)
-            time_elapsed: Tempo decorrido em segundos
-            
-        Returns:
-            dict com open, high, low, close, volume
-        """
         vol = self.volatility.get(asset_type, 0.01)
         
         # Ajusta volatilidade pelo tempo (quanto mais tempo, mais variação)
@@ -111,18 +92,6 @@ class CandleSimulator:
         interval: CandleInterval = CandleInterval.ONE_MINUTE,
         time_elapsed: int = None
     ) -> Candle:
-        """
-        Cria uma nova vela para um ativo
-        
-        Args:
-            db: Sessão do banco de dados
-            asset: Ativo para criar a vela
-            interval: Intervalo da vela
-            time_elapsed: Tempo decorrido em segundos (None = usa interval)
-            
-        Returns:
-            Candle criada e salva no banco
-        """
         now = datetime.utcnow()
         
         # Define tempo baseado no intervalo ou usa fornecido
@@ -189,10 +158,6 @@ class CandleSimulator:
         return candle
     
     def update_market_trend(self):
-        """
-        Atualiza tendência de mercado de forma aleatória
-        Simula ciclos de bull/bear market
-        """
         # Tendência muda lentamente (mean reversion)
         change = random.gauss(0, 0.05)
         self.market_trend += change
@@ -210,18 +175,6 @@ def generate_candles_for_all_stocks(
     interval: CandleInterval = CandleInterval.ONE_MINUTE,
     time_elapsed: int = 60
 ):
-    """
-    Gera velas APENAS para AÇÕES ativas (STOCK)
-    Fundos (FUND) mantêm valor fixo e não geram velas
-    
-    Args:
-        db: Sessão do banco
-        interval: Intervalo das velas
-        time_elapsed: Tempo decorrido em segundos (1 = tempo real)
-        
-    Returns:
-        Lista de velas criadas
-    """
     # Busca apenas ações (STOCK) - Fundos não variam
     stocks = db.query(Asset).filter(
         Asset.asset_type == AssetType.STOCK,
@@ -251,18 +204,6 @@ def get_recent_candles(
     interval: CandleInterval = CandleInterval.ONE_MINUTE,
     limit: int = 100
 ):
-    """
-    Busca velas recentes de um ativo
-    
-    Args:
-        db: Sessão do banco
-        asset_id: ID do ativo
-        interval: Intervalo das velas
-        limit: Número máximo de velas
-        
-    Returns:
-        Lista de velas ordenadas por tempo
-    """
     candles = db.query(Candle).filter(
         Candle.asset_id == asset_id,
         Candle.interval == interval
@@ -272,17 +213,6 @@ def get_recent_candles(
 
 
 def get_candles_summary(db: Session, asset_id: int, interval: CandleInterval = CandleInterval.ONE_MINUTE):
-    """
-    Retorna resumo das velas de um ativo
-    
-    Args:
-        db: Sessão do banco
-        asset_id: ID do ativo
-        interval: Intervalo
-        
-    Returns:
-        dict com estatísticas
-    """
     candles = get_recent_candles(db, asset_id, interval, limit=24)  # últimas 24 velas
     
     if not candles:

@@ -1,6 +1,3 @@
-"""
-Modelo de Chave PIX
-"""
 from sqlalchemy import (
     Column, Integer, String, ForeignKey, Boolean, DateTime, Enum as SQLEnum
 )
@@ -11,7 +8,6 @@ import enum
 
 
 class PixKeyType(str, enum.Enum):
-    """Tipos de chave PIX"""
     CPF = "CPF"
     CNPJ = "CNPJ"
     EMAIL = "EMAIL"
@@ -20,7 +16,6 @@ class PixKeyType(str, enum.Enum):
 
 
 class PixKey(Base):
-    """Modelo de chave PIX cadastrada"""
     __tablename__ = "pix_keys"
     
     id = Column(Integer, primary_key=True, index=True)

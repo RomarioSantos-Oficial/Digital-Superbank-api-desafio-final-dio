@@ -1,6 +1,3 @@
-"""
-Schemas para autenticação e usuários
-"""
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from datetime import date
 from typing import Optional
@@ -8,7 +5,6 @@ from src.utils.validators import validate_cpf, validate_phone, calculate_age
 
 
 class UserCreate(BaseModel):
-    """Schema para criação de usuário"""
     full_name: str = Field(..., min_length=3, max_length=255)
     cpf: str = Field(..., pattern=r'^\d{3}\.\d{3}\.\d{3}-\d{2}$')
     birth_date: date
@@ -40,7 +36,6 @@ class UserCreate(BaseModel):
 
 
 class UserResponse(BaseModel):
-    """Schema para resposta de usuário"""
     id: int
     full_name: str
     cpf: str
@@ -54,7 +49,6 @@ class UserResponse(BaseModel):
 
 
 class AddressCreate(BaseModel):
-    """Schema para criação de endereço"""
     street: str = Field(..., min_length=3)
     number: str
     complement: Optional[str] = None
@@ -66,7 +60,6 @@ class AddressCreate(BaseModel):
 
 
 class AddressResponse(BaseModel):
-    """Schema para resposta de endereço"""
     id: int
     street: str
     number: str
@@ -82,18 +75,18 @@ class AddressResponse(BaseModel):
 
 
 class Token(BaseModel):
-    """Schema para token de acesso"""
     access_token: str
     token_type: str = "bearer"
 
 
 class TokenData(BaseModel):
-    """Schema para dados do token"""
     email: Optional[str] = None
 
 
 class LoginRequest(BaseModel):
-    """Schema para requisição de login"""
+    identifier: str = Field(..., description="CPF (XXX.XXX.XXX-XX), número da conta ou email")
+    password: str
+    
     identifier: str = Field(..., description="CPF (XXX.XXX.XXX-XX), número da conta ou email")
     password: str
     
@@ -116,7 +109,6 @@ class LoginRequest(BaseModel):
 
 
 class UserUpdate(BaseModel):
-    """Schema para atualização de usuário"""
     full_name: Optional[str] = Field(None, min_length=3, max_length=255)
     email: Optional[EmailStr] = None
     phone: Optional[str] = None
@@ -130,6 +122,5 @@ class UserUpdate(BaseModel):
 
 
 class ChangePassword(BaseModel):
-    """Schema para mudança de senha"""
     old_password: str
     new_password: str = Field(..., min_length=8)

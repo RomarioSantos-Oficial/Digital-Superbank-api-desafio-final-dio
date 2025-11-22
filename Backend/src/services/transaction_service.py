@@ -1,7 +1,3 @@
-"""
-Transaction Service
-Gerencia todas as operações de transações bancárias
-"""
 from datetime import datetime, date, timedelta
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -16,12 +12,12 @@ from src.configs.settings import settings
 
 
 class TransactionLimitError(Exception):
-    """Erro de limite de transação excedido"""
+    #Erro de limite de transação excedido
     pass
 
 
 class InsufficientBalanceError(Exception):
-    """Erro de saldo insuficiente"""
+    #Erro de saldo insuficiente
     pass
 
 
@@ -30,12 +26,6 @@ def _check_daily_withdrawal_limits(
     account_id: int,
     amount: float
 ) -> None:
-    """
-    Verifica limites diários de saque:
-    - Máximo R$ 2.000 por saque
-    - Máximo 3 saques por dia
-    - Limite total diário de R$ 5.000
-    """
     # Verifica valor máximo por saque
     if amount > settings.MAX_WITHDRAWAL_AMOUNT:
         raise TransactionLimitError(
@@ -77,7 +67,6 @@ def create_deposit(
     amount: float,
     description: str = "Depósito"
 ) -> Transaction:
-    """Realizar depósito em conta"""
     if amount <= 0:
         raise ValueError("Valor do depósito deve ser positivo")
     
@@ -112,12 +101,6 @@ def create_withdrawal(
     amount: float,
     description: str = "Saque"
 ) -> Transaction:
-    """
-    Realizar saque com validação de limites diários:
-    - Máximo R$ 2.000 por saque
-    - Máximo 3 saques por dia
-    - Limite total diário de R$ 5.000
-    """
     if amount <= 0:
         raise ValueError("Valor do saque deve ser positivo")
     
@@ -162,10 +145,6 @@ def create_transfer(
     amount: float,
     description: str = "Transferência"
 ) -> tuple[Transaction, Transaction]:
-    """
-    Transferência interna com transação atômica
-    Retorna: (transação_débito, transação_crédito)
-    """
     if amount <= 0:
         raise ValueError("Valor da transferência deve ser positivo")
     
@@ -241,7 +220,7 @@ def create_pix_send(
     amount: float,
     description: str = "PIX enviado"
 ) -> Transaction:
-    """Enviar PIX (simulado - só debita da conta)"""
+    # Enviar PIX (simulado - só debita da conta)
     if amount <= 0:
         raise ValueError("Valor do PIX deve ser positivo")
     
@@ -284,7 +263,6 @@ def create_pix_receive(
     pix_key: str,
     description: str = "PIX recebido"
 ) -> Transaction:
-    """Receber PIX (simulado - só credita na conta)"""
     if amount <= 0:
         raise ValueError("Valor do PIX deve ser positivo")
     
@@ -323,7 +301,6 @@ def pay_bill(
     amount: float,
     description: str = "Pagamento de boleto"
 ) -> Transaction:
-    """Pagar boleto/conta"""
     if amount <= 0:
         raise ValueError("Valor do pagamento deve ser positivo")
     
@@ -375,10 +352,6 @@ def get_statement(
     limit: int = 50,
     offset: int = 0
 ) -> tuple[List[Transaction], int]:
-    """
-    Obter extrato com filtros
-    Retorna: (lista_transações, total_count)
-    """
     from sqlalchemy import or_
     
     query = db.query(Transaction).filter(
@@ -420,7 +393,7 @@ def schedule_transaction(
     description: str = "",
     to_account_id: Optional[int] = None
 ) -> ScheduledTransaction:
-    """Agendar transação futura"""
+    # Agendar transação futura
     if amount <= 0:
         raise ValueError("Valor deve ser positivo")
     
@@ -453,7 +426,7 @@ def get_scheduled_transactions(
     db: Session,
     account_id: int
 ) -> List[ScheduledTransaction]:
-    """Listar transações agendadas"""
+    # Listar transações agendadas
     return db.query(ScheduledTransaction).filter(
         and_(
             ScheduledTransaction.account_id == account_id,
@@ -463,11 +436,6 @@ def get_scheduled_transactions(
 
 
 def execute_scheduled_transactions(db: Session) -> int:
-    """
-    Executar transações agendadas que chegaram na data
-    (Simula um cron job)
-    Retorna: número de transações executadas
-    """
     now = datetime.utcnow()
     
     pending = db.query(ScheduledTransaction).filter(

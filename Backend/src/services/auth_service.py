@@ -1,6 +1,3 @@
-"""
-Serviço de autenticação
-"""
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from src.models.user import User, Address
@@ -10,9 +7,6 @@ from src.utils.validators import format_cpf
 
 
 def create_user(db: Session, user_data: UserCreate, address_data: AddressCreate = None) -> User:
-    """
-    Cria um novo usuário e automaticamente uma conta corrente
-    """
     from src.services.account_service import create_account
     
     # Verifica se CPF já existe
@@ -66,9 +60,6 @@ def create_user(db: Session, user_data: UserCreate, address_data: AddressCreate 
 
 
 def authenticate_user(db: Session, identifier: str, password: str) -> User:
-    """
-    Autentica um usuário usando CPF, número da conta ou email
-    """
     from src.models.account import Account
     
     user = None
@@ -124,9 +115,6 @@ def authenticate_user(db: Session, identifier: str, password: str) -> User:
 
 
 def get_user_by_email(db: Session, email: str) -> User:
-    """
-    Busca usuário por email
-    """
     user = db.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(
@@ -137,9 +125,6 @@ def get_user_by_email(db: Session, email: str) -> User:
 
 
 def get_user_by_id(db: Session, user_id: int) -> User:
-    """
-    Busca usuário por ID
-    """
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(
@@ -150,9 +135,6 @@ def get_user_by_id(db: Session, user_id: int) -> User:
 
 
 def update_user(db: Session, user_id: int, user_data: dict) -> User:
-    """
-    Atualiza dados do usuário
-    """
     user = get_user_by_id(db, user_id)
     
     # Verifica se email já está em uso por outro usuário
@@ -178,9 +160,6 @@ def update_user(db: Session, user_id: int, user_data: dict) -> User:
 
 
 def change_user_password(db: Session, user_id: int, old_password: str, new_password: str) -> bool:
-    """
-    Altera senha do usuário
-    """
     user = get_user_by_id(db, user_id)
     
     # Verifica senha antiga

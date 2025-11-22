@@ -1,6 +1,3 @@
-"""
-Modelo de Cartão de Crédito
-"""
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from datetime import datetime
@@ -8,7 +5,6 @@ from src.database.connection import Base
 
 
 class CreditCard(Base):
-    """Modelo de cartão de crédito"""
     __tablename__ = "credit_cards"
     
     id = Column(Integer, primary_key=True, index=True)

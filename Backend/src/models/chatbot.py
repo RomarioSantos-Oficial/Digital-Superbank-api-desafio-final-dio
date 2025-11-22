@@ -1,7 +1,3 @@
-"""
-Modelos do Chatbot - Base de Conhecimento e Histórico de Conversas
-BANCO DE DADOS SEPARADO: chatbot.db
-"""
 from sqlalchemy import (
     Column, Integer, String, Text, DateTime,
     Float, ForeignKey, Boolean

@@ -1,13 +1,9 @@
-"""
-Schemas para pagamento de contas
-"""
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
 
 
 class PayBillRequest(BaseModel):
-    """Schema para pagamento de conta"""
     account_id: int
     bill_type: str  # water, electricity, phone, internet, gas, other
     company: Optional[str] = None
@@ -17,7 +13,6 @@ class PayBillRequest(BaseModel):
 
 
 class PayBillResponse(BaseModel):
-    """Schema de resposta para pagamento de conta"""
     transaction_id: int
     account_id: int
     bill_type: str
@@ -30,7 +25,6 @@ class PayBillResponse(BaseModel):
 
 
 class BillPaymentHistoryResponse(BaseModel):
-    """Schema para histórico de pagamentos"""
     transaction_id: int
     account_id: int
     amount: float

@@ -1,6 +1,3 @@
-"""
-Schemas para transações
-"""
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
@@ -8,14 +5,12 @@ from src.models.transaction import TransactionType, TransactionStatus
 
 
 class DepositRequest(BaseModel):
-    """Schema para depósito"""
     account_id: int
     amount: float = Field(..., gt=0)
     description: str = "Depósito"
 
 
 class DepositResponse(BaseModel):
-    """Schema de resposta para depósito"""
     id: int
     from_account_id: Optional[int] = None
     transaction_type: TransactionType
@@ -29,14 +24,12 @@ class DepositResponse(BaseModel):
 
 
 class WithdrawalRequest(BaseModel):
-    """Schema para saque"""
     account_id: int
     amount: float = Field(..., gt=0, le=2000.0)
     description: str = "Saque"
 
 
 class WithdrawalResponse(BaseModel):
-    """Schema de resposta para saque"""
     id: int
     from_account_id: Optional[int] = None
     transaction_type: TransactionType
@@ -50,7 +43,6 @@ class WithdrawalResponse(BaseModel):
 
 
 class TransferRequest(BaseModel):
-    """Schema para transferência"""
     from_account_id: int
     to_account_number: str
     amount: float = Field(..., gt=0)
@@ -58,7 +50,6 @@ class TransferRequest(BaseModel):
 
 
 class TransferResponse(BaseModel):
-    """Schema de resposta para transferência"""
     debit_transaction_id: int
     credit_transaction_id: int
     from_account_id: int
@@ -70,7 +61,6 @@ class TransferResponse(BaseModel):
 
 
 class PixSendRequest(BaseModel):
-    """Schema para envio de PIX"""
     from_account_id: int
     pix_key: str
     amount: float = Field(..., gt=0)
@@ -78,7 +68,6 @@ class PixSendRequest(BaseModel):
 
 
 class PixReceiveRequest(BaseModel):
-    """Schema para recebimento de PIX"""
     to_account_number: str
     amount: float = Field(..., gt=0)
     pix_key: str
@@ -86,7 +75,6 @@ class PixReceiveRequest(BaseModel):
 
 
 class PixResponse(BaseModel):
-    """Schema de resposta para PIX"""
     id: int
     from_account_id: int
     amount: float
@@ -97,7 +85,6 @@ class PixResponse(BaseModel):
 
 
 class BillPaymentRequest(BaseModel):
-    """Schema para pagamento de boleto"""
     account_id: int
     bar_code: str = Field(..., min_length=44, max_length=48)
     amount: float = Field(..., gt=0)
@@ -105,7 +92,6 @@ class BillPaymentRequest(BaseModel):
 
 
 class BillPaymentResponse(BaseModel):
-    """Schema de resposta para pagamento de boleto"""
     id: int
     from_account_id: int
     amount: float
@@ -117,7 +103,6 @@ class BillPaymentResponse(BaseModel):
 
 
 class TransactionResponse(BaseModel):
-    """Schema genérico de resposta de transação"""
     id: int
     from_account_id: int
     transaction_type: TransactionType
@@ -131,7 +116,6 @@ class TransactionResponse(BaseModel):
 
 
 class StatementResponse(BaseModel):
-    """Schema de resposta para extrato"""
     transactions: List[TransactionResponse]
     total_count: int
     limit: int
@@ -139,7 +123,6 @@ class StatementResponse(BaseModel):
 
 
 class ScheduleTransactionRequest(BaseModel):
-    """Schema para agendar transação"""
     account_id: int
     transaction_type: TransactionType
     amount: float = Field(..., gt=0)
@@ -149,7 +132,6 @@ class ScheduleTransactionRequest(BaseModel):
 
 
 class ScheduledTransactionResponse(BaseModel):
-    """Schema de resposta para transação agendada"""
     id: int
     from_account_id: int
     transaction_type: TransactionType

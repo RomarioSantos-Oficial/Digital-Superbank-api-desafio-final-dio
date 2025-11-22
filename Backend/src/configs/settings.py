@@ -1,12 +1,8 @@
-"""
-Configurações da aplicação Digital Superbank
-"""
 from pydantic_settings import BaseSettings
 from typing import Optional
 
 
 class Settings(BaseSettings):
-    """Configurações da aplicação"""
     
     # App
     APP_NAME: str = "Digital Superbank API"

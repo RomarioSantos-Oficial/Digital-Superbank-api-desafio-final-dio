@@ -1,6 +1,3 @@
-"""
-Utilitários de segurança e autenticação
-"""
 from datetime import datetime, timedelta
 from typing import Optional
 from jose import JWTError, jwt
@@ -12,19 +9,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verifica se a senha corresponde ao hash"""
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    """Gera hash da senha"""
     return pwd_context.hash(password)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
-    """
-    Cria um token JWT
-    """
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
@@ -37,9 +29,6 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
 
 
 def decode_access_token(token: str) -> Optional[dict]:
-    """
-    Decodifica um token JWT
-    """
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         return payload

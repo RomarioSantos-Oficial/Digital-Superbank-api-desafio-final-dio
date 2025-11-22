@@ -1,7 +1,3 @@
-"""
-Investment Service
-Gerencia ativos de investimento e portfólio
-"""
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -19,10 +15,6 @@ def get_all_assets(
     category: Optional[AssetCategory] = None,
     active_only: bool = True
 ) -> List[Asset]:
-    """
-    Listar todos os ativos disponíveis
-    Filtros opcionais: tipo, categoria, apenas ativos
-    """
     query = db.query(Asset)
     
     if active_only:
@@ -38,7 +30,7 @@ def get_all_assets(
 
 
 def get_asset_by_id(db: Session, asset_id: int) -> Optional[Asset]:
-    """Buscar ativo por ID"""
+    # Buscar ativo por ID
     return db.query(Asset).filter(Asset.id == asset_id).first()
 
 
@@ -48,10 +40,6 @@ def buy_asset(
     asset_id: int,
     quantity: int
 ) -> tuple[PortfolioItem, Transaction]:
-    """
-    Comprar ativo
-    Retorna: (item_portfólio, transação)
-    """
     if quantity <= 0:
         raise ValueError("Quantidade deve ser positiva")
     
@@ -146,11 +134,6 @@ def sell_asset(
     asset_id: int,
     quantity: int
 ) -> tuple[Optional[PortfolioItem], Transaction]:
-    """
-    Vender ativo
-    Retorna: (item_portfólio_ou_None, transação)
-    Se vendeu tudo, item é removido e retorna None
-    """
     if quantity <= 0:
         raise ValueError("Quantidade deve ser positiva")
     
@@ -226,10 +209,6 @@ def sell_asset(
 
 
 def get_portfolio(db: Session, account_id: int) -> List[dict]:
-    """
-    Obter portfólio completo com cálculos
-    Retorna lista de dicts com informações detalhadas
-    """
     # Busca conta
     account = db.query(Account).filter(Account.id == account_id).first()
     if not account:
@@ -274,9 +253,7 @@ def get_portfolio(db: Session, account_id: int) -> List[dict]:
 
 
 def get_portfolio_summary(db: Session, account_id: int) -> dict:
-    """
-    Resumo do portfólio com totalizadores
-    """
+    # Resumo do portfólio com totalizadores
     portfolio = get_portfolio(db, account_id)
     
     if not portfolio:
@@ -309,11 +286,6 @@ def get_portfolio_summary(db: Session, account_id: int) -> dict:
 
 
 def update_asset_prices(db: Session) -> int:
-    """
-    Atualizar preços dos ativos com simulação de flutuação de mercado
-    Flutuação aleatória de -5% a +5%
-    Retorna: número de ativos atualizados
-    """
     assets = db.query(Asset).filter(Asset.is_active == True).all()
     
     updated_count = 0
@@ -346,9 +318,6 @@ def create_asset(
     current_price: float,
     description: Optional[str] = None
 ) -> Asset:
-    """
-    Criar novo ativo (função administrativa)
-    """
     if current_price <= 0:
         raise ValueError("Preço deve ser positivo")
     
@@ -375,10 +344,6 @@ def create_asset(
 
 
 def simulate_market_realtime(db: Session) -> dict:
-    """
-    Simula flutuação de mercado em tempo real para todos os ativos
-    Retorna: dict com ativos atualizados e suas variações
-    """
     assets = db.query(Asset).filter(Asset.is_active == True).all()
     
     updated_assets = []

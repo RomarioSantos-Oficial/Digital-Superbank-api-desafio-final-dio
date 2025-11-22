@@ -1,14 +1,8 @@
-"""
-Validadores customizados
-"""
 import re
 from datetime import date
 
 
 def validate_cpf(cpf: str) -> bool:
-    """
-    Valida CPF brasileiro usando algoritmo de dígitos verificadores
-    """
     # Remove caracteres não numéricos
     cpf_numbers = re.sub(r'\D', '', cpf)
     
@@ -38,9 +32,7 @@ def validate_cpf(cpf: str) -> bool:
 
 
 def format_cpf(cpf: str) -> str:
-    """
-    Formata CPF para o padrão XXX.XXX.XXX-XX
-    """
+    #Formata CPF para o padrão XXX.XXX.XXX-XX
     cpf_numbers = re.sub(r'\D', '', cpf)
     if len(cpf_numbers) != 11:
         return cpf
@@ -48,17 +40,11 @@ def format_cpf(cpf: str) -> str:
 
 
 def validate_cep(cep: str) -> bool:
-    """
-    Valida formato de CEP brasileiro
-    """
     pattern = r'^\d{5}-?\d{3}$'
     return bool(re.match(pattern, cep))
 
 
 def format_cep(cep: str) -> str:
-    """
-    Formata CEP para o padrão XXXXX-XXX
-    """
     cep_numbers = re.sub(r'\D', '', cep)
     if len(cep_numbers) != 8:
         return cep
@@ -66,17 +52,11 @@ def format_cep(cep: str) -> str:
 
 
 def validate_phone(phone: str) -> bool:
-    """
-    Valida formato de telefone brasileiro
-    """
     pattern = r'^\(\d{2}\)\s?\d{4,5}-?\d{4}$'
     return bool(re.match(pattern, phone))
 
 
 def calculate_age(birth_date: date) -> int:
-    """
-    Calcula idade a partir da data de nascimento
-    """
     today = date.today()
     age = today.year - birth_date.year
     if (today.month, today.day) < (birth_date.month, birth_date.day):
@@ -85,9 +65,6 @@ def calculate_age(birth_date: date) -> int:
 
 
 def validate_account_age_for_type(birth_date: date, account_type: str) -> tuple[bool, str]:
-    """
-    Valida se a idade permite criar determinado tipo de conta
-    """
     age = calculate_age(birth_date)
     
     age_rules = {

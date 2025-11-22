@@ -1,6 +1,3 @@
-"""
-Modelos de Investimento
-"""
 from sqlalchemy import (
     Column, Integer, String, Float, DateTime, 
     ForeignKey, Boolean, Enum as SQLEnum
@@ -28,7 +25,6 @@ class AssetCategory(str, enum.Enum):
 
 
 class Asset(Base):
-    """Modelo de ativo financeiro disponível para investimento"""
     __tablename__ = "assets"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -52,7 +48,6 @@ class Asset(Base):
 
 
 class MarketHistory(Base):
-    """Modelo de histórico de preços dos ativos ao longo do tempo"""
     __tablename__ = "market_history"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -85,12 +80,7 @@ class CandleInterval(str, enum.Enum):
 
 
 class Candle(Base):
-    """
-    Modelo de velas (candlestick) para análise técnica
-    OHLCV: Open, High, Low, Close, Volume
-    """
     __tablename__ = "candles"
-    
     id = Column(Integer, primary_key=True, index=True)
     asset_id = Column(Integer, ForeignKey("assets.id"), nullable=False)
     interval = Column(SQLEnum(CandleInterval), nullable=False, default=CandleInterval.ONE_MINUTE)
@@ -118,7 +108,6 @@ class Candle(Base):
         return f"<Candle(asset_id={self.asset_id}, interval={self.interval}, close={self.close_price})>"
     
     def to_dict(self):
-        """Converte para dicionário (útil para WebSocket)"""
         return {
             "id": self.id,
             "asset_id": self.asset_id,
@@ -135,7 +124,6 @@ class Candle(Base):
 
 
 class PortfolioItem(Base):
-    """Modelo de item no portfólio de investimentos do cliente"""
     __tablename__ = "portfolio_items"
     
     id = Column(Integer, primary_key=True, index=True)

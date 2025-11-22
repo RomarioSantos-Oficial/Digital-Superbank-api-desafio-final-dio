@@ -1,6 +1,3 @@
-"""
-Service para processamento de mensagens do Chatbot
-"""
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 from typing import Optional, List, Tuple
@@ -17,11 +14,9 @@ from src.models.user import User
 
 
 class ChatbotService:
-    """Serviço de processamento do chatbot"""
     
     @staticmethod
     def normalize_text(text: str) -> str:
-        """Normaliza texto para comparação"""
         text = text.lower()
         text = re.sub(r'[^\w\s]', '', text)  # Remove pontuação
         text = re.sub(r'\s+', ' ', text)  # Remove espaços extras
@@ -29,7 +24,6 @@ class ChatbotService:
     
     @staticmethod
     def calculate_similarity(text1: str, text2: str) -> float:
-        """Calcula similaridade simples entre textos (0-1)"""
         words1 = set(ChatbotService.normalize_text(text1).split())
         words2 = set(ChatbotService.normalize_text(text2).split())
         
@@ -43,12 +37,6 @@ class ChatbotService:
     
     @staticmethod
     def detect_intent(message: str, db: Session) -> Tuple[Optional[KnowledgeBase], float]:
-        """
-        Detecta intenção e encontra melhor resposta
-        
-        Returns:
-            Tuple[KnowledgeBase, confidence_score]
-        """
         normalized_message = ChatbotService.normalize_text(message)
         
         # Busca todas as bases de conhecimento ativas
@@ -92,7 +80,6 @@ class ChatbotService:
         user_id: Optional[int],
         db: Session
     ) -> Tuple[ChatConversation, str]:
-        """Obtém ou cria uma conversa"""
         if not session_id:
             session_id = str(uuid.uuid4())
         
@@ -118,12 +105,6 @@ class ChatbotService:
         user_id: Optional[int],
         db: Session
     ) -> dict:
-        """
-        Processa mensagem do usuário e retorna resposta
-        
-        Returns:
-            dict com response, intent, confidence, session_id, suggestions
-        """
         # Obtém ou cria conversa
         conversation, session_id = ChatbotService.get_or_create_conversation(
             session_id, user_id, db
@@ -201,7 +182,6 @@ class ChatbotService:
     
     @staticmethod
     def get_suggestions(category: str, db: Session, limit: int = 3) -> List[str]:
-        """Obtém sugestões de perguntas relacionadas"""
         items = db.query(KnowledgeBase).filter(
             KnowledgeBase.category == category,
             KnowledgeBase.is_active == True
@@ -211,7 +191,6 @@ class ChatbotService:
     
     @staticmethod
     def get_popular_questions(db: Session, limit: int = 5) -> List[str]:
-        """Obtém perguntas mais populares"""
         items = db.query(KnowledgeBase).filter(
             KnowledgeBase.is_active == True
         ).order_by(desc(KnowledgeBase.usage_count)).limit(limit).all()
@@ -220,14 +199,12 @@ class ChatbotService:
     
     @staticmethod
     def get_conversation_history(session_id: str, db: Session) -> Optional[ChatConversation]:
-        """Obtém histórico de conversa"""
         return db.query(ChatConversation).filter(
             ChatConversation.session_id == session_id
         ).first()
     
     @staticmethod
     def save_feedback(message_id: int, is_helpful: bool, comment: Optional[str], db: Session) -> bool:
-        """Salva feedback do usuário"""
         message = db.query(ChatMessage).filter(ChatMessage.id == message_id).first()
         if not message:
             return False
@@ -250,7 +227,6 @@ class ChatbotService:
     
     @staticmethod
     def get_stats(db: Session) -> dict:
-        """Obtém estatísticas do chatbot"""
         total_conversations = db.query(func.count(ChatConversation.id)).scalar()
         total_messages = db.query(func.count(ChatMessage.id)).scalar()
         
@@ -297,7 +273,6 @@ class ChatbotService:
         user_id: Optional[int],
         db: Session
     ) -> None:
-        """Registra pergunta não respondida para aprendizado"""
         # Verifica se já existe
         existing = db.query(UserLearnedQuestion).filter(
             UserLearnedQuestion.original_question == question
@@ -325,7 +300,6 @@ class ChatbotService:
         category: Optional[str],
         db: Session
     ) -> ConversationContext:
-        """Obtém ou atualiza contexto da conversa"""
         context = db.query(ConversationContext).filter(
             ConversationContext.session_id == session_id
         ).first()
@@ -358,7 +332,6 @@ class ChatbotService:
         keywords: Optional[str],
         db: Session
     ) -> KnowledgeBase:
-        """Adiciona conhecimento aprendido à base"""
         knowledge = KnowledgeBase(
             category=category,
             question=question,
@@ -379,7 +352,6 @@ class ChatbotService:
         variation: str,
         db: Session
     ) -> bool:
-        """Adiciona variação de pergunta"""
         # Verifica se já existe
         existing = db.query(QuestionVariation).filter(
             QuestionVariation.knowledge_id == knowledge_id,
@@ -399,7 +371,6 @@ class ChatbotService:
     
     @staticmethod
     def get_unanswered_questions(db: Session, limit: int = 20) -> List[dict]:
-        """Obtém perguntas não respondidas para revisão"""
         questions = db.query(UserLearnedQuestion).filter(
             UserLearnedQuestion.approved == False
         ).order_by(
@@ -419,10 +390,6 @@ class ChatbotService:
     
     @staticmethod
     def auto_learn_from_feedback(db: Session) -> int:
-        """
-        Aprende automaticamente com feedbacks negativos
-        Identifica padrões e sugere melhorias
-        """
         # Busca mensagens com feedback negativo
         negative_feedback = db.query(ChatMessage).join(
             ChatFeedback

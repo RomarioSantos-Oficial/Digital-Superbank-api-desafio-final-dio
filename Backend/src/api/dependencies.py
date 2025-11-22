@@ -21,9 +21,7 @@ async def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> User:
-    """
-    Obtém o usuário atual baseado no token JWT
-    """
+
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não foi possível validar as credenciais",
@@ -50,10 +48,6 @@ async def get_current_user_optional(
     token: Optional[str] = Depends(oauth2_scheme_optional),
     db: Session = Depends(get_db)
 ) -> Optional[User]:
-    """
-    Obtém o usuário atual se token fornecido, None caso contrário
-    Útil para endpoints que funcionam com ou sem autenticação (ex: chatbot)
-    """
     if token is None:
         return None
     

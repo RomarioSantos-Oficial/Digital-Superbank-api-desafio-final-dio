@@ -1,6 +1,3 @@
-"""
-Modelo de Usuário
-"""
 from sqlalchemy import (
     Column, Integer, String, Date, DateTime, Boolean, ForeignKey
 )
@@ -10,7 +7,6 @@ from src.database.connection import Base
 
 
 class User(Base):
-    """Modelo de usuário do sistema"""
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -34,7 +30,6 @@ class User(Base):
 
 
 class Address(Base):
-    """Modelo de endereço"""
     __tablename__ = "addresses"
     
     id = Column(Integer, primary_key=True, index=True)

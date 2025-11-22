@@ -1,25 +1,15 @@
-"""
-Geradores de números de conta, cartão, etc.
-"""
 import random
 from datetime import date, timedelta
 from src.configs.settings import settings
 
 
 def generate_account_number(account_type: str) -> str:
-    """
-    Gera número de conta baseado no tipo
-    Formato: XXXXXX-D (D = dígito verificador)
-    """
     account_digits = settings.ACCOUNT_TYPES.get(account_type, 1)
     base_number = random.randint(100000, 999999)
     return f"{base_number:06d}-{account_digits}"
 
 
 def luhn_checksum(card_number: str) -> int:
-    """
-    Calcula o dígito verificador usando algoritmo de Luhn
-    """
     def digits_of(n):
         return [int(d) for d in str(n)]
     
@@ -33,10 +23,6 @@ def luhn_checksum(card_number: str) -> int:
 
 
 def generate_card_number() -> str:
-    """
-    Gera número de cartão de crédito usando algoritmo de Luhn
-    Formato: 5XXX XXXX XXXX XXXX (Bandeira Aura)
-    """
     # Começa com 5 para Bandeira Aura (similar a Mastercard)
     partial = "5" + "".join([str(random.randint(0, 9)) for _ in range(14)])
     
@@ -52,16 +38,10 @@ def generate_card_number() -> str:
 
 
 def generate_cvv() -> str:
-    """
-    Gera CVV de 3 dígitos
-    """
     return f"{random.randint(0, 999):03d}"
 
 
 def generate_card_expiry_date(years: int = 5) -> date:
-    """
-    Gera data de validade do cartão (X anos a partir de hoje)
-    """
     today = date.today()
     expiry = today + timedelta(days=365 * years)
     # Último dia do mês
@@ -73,9 +53,6 @@ def generate_card_expiry_date(years: int = 5) -> date:
 
 
 def calculate_credit_score(account_balance: float, total_deposits: int) -> int:
-    """
-    Calcula score de crédito simulado (0-100)
-    """
     score = 50  # Base
     
     # Adiciona pontos baseado no saldo
@@ -98,10 +75,6 @@ def calculate_credit_score(account_balance: float, total_deposits: int) -> int:
 
 
 def determine_credit_limit(score: int) -> tuple[float, str]:
-    """
-    Determina limite de crédito baseado no score
-    Retorna (limite, categoria)
-    """
     if score < 60:
         return 0.0, "REJECTED"
     elif score < 71:

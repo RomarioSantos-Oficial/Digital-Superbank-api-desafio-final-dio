@@ -1,7 +1,3 @@
-"""
-Credit Card Service
-Gerencia cartões de crédito, análise de crédito e transações
-"""
 from datetime import datetime, timedelta
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -16,22 +12,22 @@ import random
 
 
 def _generate_cvv() -> str:
-    """Gera CVV de 3 dígitos"""
+    #Gera CVV de 3 dígitos
     return str(random.randint(100, 999))
 
 
 def _generate_expiry_date() -> datetime:
-    """Gera data de validade (5 anos a partir de hoje)"""
+    #Gera data de validade (5 anos a partir de hoje)
     return datetime.utcnow() + timedelta(days=365 * 5)
 
 
 def _determine_limit_by_score(score: int) -> float:
-    """
-    Determina limite baseado no score:
-    - 60-70: R$ 500 (Aura Basic)
-    - 71-85: R$ 1.500 (Aura Plus)
-    - 86-100: R$ 5.000 (Aura Premium)
-    """
+    #
+    # Determina limite baseado no score:
+    # - 60-70: R$ 500 (Aura Basic)
+    # - 71-85: R$ 1.500 (Aura Plus)
+    # - 86-100: R$ 5.000 (Aura Premium)
+    #
     if score < 60:
         return 0.0  # Não aprovado
     elif score <= 70:
@@ -43,7 +39,7 @@ def _determine_limit_by_score(score: int) -> float:
 
 
 def _determine_card_tier(limit: float) -> str:
-    """Determina categoria do cartão baseado no limite"""
+    #Determina categoria do cartão baseado no limite
     if limit <= 500:
         return "Aura Basic"
     elif limit <= 1500:
@@ -57,12 +53,12 @@ def create_credit_card(
     account_id: int,
     requested_limit: Optional[float] = None
 ) -> tuple[CreditCard, str]:
-    """
-    Criar cartão de crédito com análise de crédito
-    Retorna: (cartão, cvv)
-    ATENÇÃO: CVV só é retornado na criação!
-    LIMITAÇÃO: Apenas 1 cartão de crédito por usuário
-    """
+    #
+    # Criar cartão de crédito com análise de crédito
+    # Retorna: (cartão, cvv)
+    # ATENÇÃO: CVV só é retornado na criação!
+    # LIMITAÇÃO: Apenas 1 cartão de crédito por usuário
+    #
     # Busca conta
     account = db.query(Account).filter(Account.id == account_id).first()
     if not account:
@@ -148,19 +144,19 @@ def create_credit_card(
 
 
 def get_cards_by_account(db: Session, account_id: int) -> List[CreditCard]:
-    """Listar cartões de uma conta"""
+    #Listar cartões de uma conta
     return db.query(CreditCard).filter(
         CreditCard.account_id == account_id
     ).all()
 
 
 def get_card_by_id(db: Session, card_id: int) -> Optional[CreditCard]:
-    """Buscar cartão por ID"""
+    #Buscar cartão por ID
     return db.query(CreditCard).filter(CreditCard.id == card_id).first()
 
 
 def block_card(db: Session, card_id: int) -> CreditCard:
-    """Bloquear cartão"""
+    #Bloquear cartão
     card = get_card_by_id(db, card_id)
     if not card:
         raise ValueError("Cartão não encontrado")
@@ -179,7 +175,7 @@ def block_card(db: Session, card_id: int) -> CreditCard:
 
 
 def unblock_card(db: Session, card_id: int) -> CreditCard:
-    """Desbloquear cartão"""
+    #Desbloquear cartão
     card = get_card_by_id(db, card_id)
     if not card:
         raise ValueError("Cartão não encontrado")
@@ -208,9 +204,7 @@ def make_purchase(
     description: str = "Compra no cartão",
     installments: int = 1
 ) -> Transaction:
-    """
-    Realizar compra no cartão de crédito
-    """
+    # Realizar compra no cartão de crédito
     if amount <= 0:
         raise ValueError("Valor da compra deve ser positivo")
     
@@ -262,10 +256,7 @@ def pay_bill(
     card_id: int,
     amount: float
 ) -> tuple[Transaction, CreditCard]:
-    """
-    Pagar fatura do cartão
-    Retorna: (transação, cartão_atualizado)
-    """
+    # Pagar fatura do cartão de crédito
     if amount <= 0:
         raise ValueError("Valor do pagamento deve ser positivo")
     
@@ -323,10 +314,7 @@ def adjust_limit(
     card_id: int,
     new_limit: float
 ) -> CreditCard:
-    """
-    Ajustar limite do cartão
-    Validação baseada no score/histórico
-    """
+    #Ajustar limite do cartão, validação baseada no score/histórico
     if new_limit <= 0:
         raise ValueError("Novo limite deve ser positivo")
     
@@ -382,10 +370,8 @@ def create_virtual_card(
     db: Session,
     account_id: int
 ) -> tuple[CreditCard, str]:
-    """
-    Criar cartão virtual
-    Mesmo processo de análise de crédito
-    """
+    # Criar cartão virtual
+    # Mesmo processo de análise de crédito
     # Reutiliza lógica de criação
     card, cvv = create_credit_card(db, account_id)
     

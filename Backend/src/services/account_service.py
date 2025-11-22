@@ -1,6 +1,3 @@
-"""
-Serviço de contas bancárias
-"""
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from src.models.account import Account
@@ -11,7 +8,6 @@ from src.configs.settings import settings
 
 
 def create_account(db: Session, user_id: int, account_type: str, initial_deposit: float = 0.0) -> Account:
-    """Cria uma nova conta bancária"""
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
@@ -72,7 +68,6 @@ def create_account(db: Session, user_id: int, account_type: str, initial_deposit
 
 
 def get_account_by_id(db: Session, account_id: int) -> Account:
-    """Busca conta por ID"""
     account = db.query(Account).filter(Account.id == account_id).first()
     if not account:
         raise HTTPException(status_code=404, detail="Conta não encontrada")
@@ -80,7 +75,6 @@ def get_account_by_id(db: Session, account_id: int) -> Account:
 
 
 def get_account_by_number(db: Session, account_number: str) -> Account:
-    """Busca conta por número"""
     account = db.query(Account).filter(Account.account_number == account_number).first()
     if not account:
         raise HTTPException(status_code=404, detail="Conta não encontrada")
@@ -88,17 +82,15 @@ def get_account_by_number(db: Session, account_number: str) -> Account:
 
 
 def get_user_accounts(db: Session, user_id: int):
-    """Buscar todas as contas de um usuário"""
     return db.query(Account).filter(Account.user_id == user_id).all()
 
 
 def get_accounts_by_user_id(db: Session, user_id: int):
-    """Alias para get_user_accounts - buscar todas as contas de um usuário"""
+    return get_user_accounts(db, user_id)
     return get_user_accounts(db, user_id)
 
 
 def update_balance(db: Session, account: Account, amount: float):
-    """Atualiza saldo da conta"""
     account.balance += amount
     db.commit()
     db.refresh(account)

@@ -1,6 +1,3 @@
-"""
-Schemas para gerenciamento de chaves PIX
-"""
 from pydantic import BaseModel, Field, validator
 from datetime import datetime
 from typing import Optional
@@ -9,14 +6,12 @@ import re
 
 
 class PixKeyCreate(BaseModel):
-    """Schema para criação de chave PIX"""
     account_id: int = Field(..., description="ID da conta")
     key_type: PixKeyType = Field(..., description="Tipo da chave")
     key_value: str = Field(..., description="Valor da chave")
     
     @validator('key_value')
     def validate_key_value(cls, v, values):
-        """Valida o valor da chave de acordo com o tipo"""
         if 'key_type' not in values:
             return v
             
@@ -62,7 +57,6 @@ class PixKeyCreate(BaseModel):
 
 
 class PixKeyResponse(BaseModel):
-    """Schema de resposta com dados da chave PIX"""
     id: int
     user_id: int
     account_id: int
@@ -77,12 +71,10 @@ class PixKeyResponse(BaseModel):
 
 
 class PixKeyListResponse(BaseModel):
-    """Schema de resposta com lista de chaves PIX"""
     keys: list[PixKeyResponse]
     total: int
 
 
 class PixKeyDeleteResponse(BaseModel):
-    """Schema de resposta ao deletar chave PIX"""
     message: str
     key_id: int

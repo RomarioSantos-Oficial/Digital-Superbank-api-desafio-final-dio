@@ -1,6 +1,3 @@
-"""
-Schemas para investimentos
-"""
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
@@ -8,7 +5,6 @@ from src.models.investment import AssetType, AssetCategory
 
 
 class AssetResponse(BaseModel):
-    """Schema para resposta de ativo"""
     id: int
     symbol: str
     name: str
@@ -25,14 +21,12 @@ class AssetResponse(BaseModel):
 
 
 class BuyAssetRequest(BaseModel):
-    """Schema para compra de ativo"""
     account_id: int
     asset_id: int
     quantity: int = Field(..., gt=0)
 
 
 class BuyAssetResponse(BaseModel):
-    """Schema de resposta para compra de ativo"""
     transaction_id: int
     portfolio_item_id: int
     asset_id: int
@@ -46,14 +40,12 @@ class BuyAssetResponse(BaseModel):
 
 
 class SellAssetRequest(BaseModel):
-    """Schema para venda de ativo"""
     account_id: int
     asset_id: int
     quantity: int = Field(..., gt=0)
 
 
 class SellAssetResponse(BaseModel):
-    """Schema de resposta para venda de ativo"""
     transaction_id: int
     asset_id: int
     symbol: str
@@ -65,7 +57,6 @@ class SellAssetResponse(BaseModel):
 
 
 class PortfolioItemResponse(BaseModel):
-    """Schema para item do portfólio"""
     portfolio_item_id: int
     asset_id: int
     symbol: str
@@ -83,7 +74,6 @@ class PortfolioItemResponse(BaseModel):
 
 
 class PortfolioSummaryResponse(BaseModel):
-    """Schema para resumo do portfólio"""
     account_id: int
     total_items: int
     total_invested: float
