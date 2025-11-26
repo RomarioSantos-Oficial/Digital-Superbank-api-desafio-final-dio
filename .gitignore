@@ -38,3 +38,9 @@ pnpm-debug.log*
 Thumbs.db
 
 
+
+# Logs
+Backend/logs/
+*.log
+# SQLite DBs
+Backend/src/database/data/*.db
