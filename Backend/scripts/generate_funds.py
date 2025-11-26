@@ -194,12 +194,45 @@ def generate_funds():
             f.write("📊 ESTATÍSTICAS GERAIS\n")
             f.write("═" * 80 + "\n\n")
             
-            preco_medio = sum(f['price'] for f in fundos_criados) / len(fundos_criados)
-            vol_media = sum(f['volatility'] for f in fundos_criados) / len(fundos_criados)
-            preco_min = min(f['price'] for f in fundos_criados)
-            preco_max = max(f['price'] for f in fundos_criados)
+            # Se nenhum fundo foi criado nessa execução (foram todos pulados), use os fundos já existentes no DB
+            if len(fundos_criados) == 0:
+                existing_assets = (
+                    db.query(Asset)
+                    .filter(Asset.asset_type == AssetType.FUND)
+                    .all()
+                )
+                if existing_assets:
+                    prices = [a.current_price for a in existing_assets]
+                    vol_media = 0.0
+                    preco_medio = sum(prices) / len(prices)
+                    preco_min = min(prices)
+                    preco_max = max(prices)
+                    total_count = len(existing_assets)
+                else:
+                    # Não há fundos criados nem existentes: pula a parte de estatísticas
+                    f.write(
+                        "Nenhum fundo criado nesta execução e nenhum fundo existente "
+                        "para calcular estatísticas.\n"
+                    )
+                    print(
+                        "⚠️  Nenhum fundo encontrado para gerar estatísticas."
+                    )
+                    total_count = 0
+                    preco_medio = vol_media = preco_min = preco_max = 0.0
+            else:
+                preco_medio = (
+                    sum(f['price'] for f in fundos_criados)
+                    / len(fundos_criados)
+                )
+                vol_media = (
+                    sum(f['volatility'] for f in fundos_criados)
+                    / len(fundos_criados)
+                )
+                preco_min = min(f['price'] for f in fundos_criados)
+                preco_max = max(f['price'] for f in fundos_criados)
+                total_count = len(fundos_criados)
             
-            f.write(f"Total de Fundos: {len(fundos_criados)}\n")
+            f.write(f"Total de Fundos: {total_count}\n")
             f.write(f"Preço Médio: R$ {preco_medio:,.2f}\n")
             f.write(f"Preço Mínimo: R$ {preco_min:,.2f}\n")
             f.write(f"Preço Máximo: R$ {preco_max:,.2f}\n")
@@ -212,7 +245,9 @@ def generate_funds():
             for tipo, lista_fundos in tipos.items():
                 if not lista_fundos:
                     continue
-                preco_medio = sum(f['price'] for f in lista_fundos) / len(lista_fundos)
+                preco_medio = (
+                    sum(f['price'] for f in lista_fundos) / len(lista_fundos)
+                )
                 f.write(f"{tipo:25} | {len(lista_fundos):2} fundos | ")
                 f.write(f"Preço Médio: R$ {preco_medio:8,.2f}\n")
             
@@ -221,8 +256,8 @@ def generate_funds():
             f.write("═" * 80 + "\n")
         
         print("═" * 70)
-        print(f"✅ {len(fundos_criados)} FUNDOS IMOBILIÁRIOS CRIADOS COM SUCESSO!")
-        print(f"✅ Dados salvos em: fundo_investimento.txt")
+        print("✅ {} FUNDOS IMOBILIÁRIOS CRIADOS COM SUCESSO!".format(len(fundos_criados)))
+        print("✅ Dados salvos em: fundo_investimento.txt")
         print("═" * 70)
         
     except Exception as e:
