@@ -1,0 +1,85 @@
+﻿python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:112 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 171, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 152, in main
+    print("\U0001f680 Inicializando banco de dados...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\limar\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:114 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 171, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 152, in main
+    print("\U0001f680 Inicializando banco de dados...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\limar\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:114 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 171, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 152, in main
+    print("\U0001f680 Inicializando banco de dados...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\limar\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:114 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 171, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 152, in main
+    print("\U0001f680 Inicializando banco de dados...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\limar\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:114 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 171, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\init_db.py", line 152, in main
+    print("\U0001f680 Inicializando banco de dados...")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\limar\AppData\Local\Programs\Python\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>

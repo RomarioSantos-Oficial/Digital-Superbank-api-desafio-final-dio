@@ -21,6 +21,7 @@ param (
     [switch]$ExcludeChatbot = $false,
     [switch]$IncludeInteractiveChatbot = $false,
     [switch]$ContinueOnError = $false
+    ,[switch]$UpdateAssets = $false
 )
 
 function Write-Log {
@@ -66,8 +67,18 @@ function Run-Script {
     Write-Log "Executando: $fullCmd"
 
     try {
-        # Executa no contexto atual. Poderíamos usar Start-Process se preferir separar o processo.
-        iex $fullCmd
+        # Força Python a usar UTF-8 para evitar UnicodeEncodeError no Windows consoles
+        $oldPythonIO = $env:PYTHONIOENCODING
+        $oldPythonUTF8 = $env:PYTHONUTF8
+        $env:PYTHONIOENCODING = 'utf-8'
+        $env:PYTHONUTF8 = '1'
+
+        # Executa explicitamente e escreve saída para log (UTF-8)
+        $scriptNameSafe = ([IO.Path]::GetFileName($ScriptPath)).Replace(' ', '_')
+        $logFilePath = Join-Path $BackendDir "logs\$scriptNameSafe.log"
+        if (!(Test-Path (Split-Path $logFilePath))) { New-Item -Path (Split-Path $logFilePath) -ItemType Directory -Force | Out-Null }
+        Write-Log "Executando e gravando log: $logFilePath"
+        & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath $logFilePath -Encoding utf8 -Append
         if (!$LASTEXITCODE -or $LASTEXITCODE -eq 0) {
             Write-Log "Sucesso: $ScriptPath"
             return $true
@@ -81,6 +92,9 @@ function Run-Script {
         if (-not $ContinueOnError) { exit 1 }
         return $false
     }
+    # Restaura variáveis de ambiente
+    if ($null -eq $oldPythonIO) { Remove-Item env:PYTHONIOENCODING -ErrorAction SilentlyContinue } else { $env:PYTHONIOENCODING = $oldPythonIO }
+    if ($null -eq $oldPythonUTF8) { Remove-Item env:PYTHONUTF8 -ErrorAction SilentlyContinue } else { $env:PYTHONUTF8 = $oldPythonUTF8 }
 }
 
 # Passo opcional: instalar dependências
@@ -120,6 +134,9 @@ if (-not $ExcludeChatbot) {
 
 # Roda em sequência
 foreach ($job in $jobs) {
+    if ($UpdateAssets -and ($job.script -like '*stocks*' -or $job.script -like '*funds*' -or $job.script -like '*fixed*')) {
+        $job.args = '--update'
+    }
     $ok = Run-Script -ScriptPath $job.script -Arguments $job.args
     if (-not $ok -and -not $ContinueOnError) {
         Write-Log "Abortando sequência devido a erro em $($job.script)" "ERROR"
