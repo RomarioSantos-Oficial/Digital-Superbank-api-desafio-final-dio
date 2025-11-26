@@ -1,0 +1,45 @@
+﻿======================================================================
+­ƒÅó CRIANDO FUNDOS IMOBILI├üRIOS
+======================================================================
+
+ÔÜá´©Å  Fundo 1/25: CORP11 j├í existe - pulando
+ÔÜá´©Å  Fundo 2/25: OFFC11 j├í existe - pulando
+ÔÜá´©Å  Fundo 3/25: BIZZ11 j├í existe - pulando
+ÔÜá´©Å  Fundo 4/25: WORK11 j├í existe - pulando
+ÔÜá´©Å  Fundo 5/25: MALL11 j├í existe - pulando
+ÔÜá´©Å  Fundo 6/25: SHOP11 j├í existe - pulando
+ÔÜá´©Å  Fundo 7/25: PLAZ11 j├í existe - pulando
+ÔÜá´©Å  Fundo 8/25: LOGI11 j├í existe - pulando
+ÔÜá´©Å  Fundo 9/25: WRHZ11 j├í existe - pulando
+ÔÜá´©Å  Fundo 10/25: TRNS11 j├í existe - pulando
+ÔÜá´©Å  Fundo 11/25: SUPZ11 j├í existe - pulando
+ÔÜá´©Å  Fundo 12/25: HTLS11 j├í existe - pulando
+ÔÜá´©Å  Fundo 13/25: RSRT11 j├í existe - pulando
+ÔÜá´©Å  Fundo 14/25: EDUC11 j├í existe - pulando
+ÔÜá´©Å  Fundo 15/25: UNIV11 j├í existe - pulando
+ÔÜá´©Å  Fundo 16/25: HOME11 j├í existe - pulando
+ÔÜá´©Å  Fundo 17/25: LIVZ11 j├í existe - pulando
+ÔÜá´©Å  Fundo 18/25: APTM11 j├í existe - pulando
+ÔÜá´©Å  Fundo 19/25: HOSP11 j├í existe - pulando
+ÔÜá´©Å  Fundo 20/25: MEDI11 j├í existe - pulando
+ÔÜá´©Å  Fundo 21/25: BANK11 j├í existe - pulando
+ÔÜá´©Å  Fundo 22/25: FINA11 j├í existe - pulando
+ÔÜá´©Å  Fundo 23/25: MIXD11 j├í existe - pulando
+ÔÜá´©Å  Fundo 24/25: URBN11 j├í existe - pulando
+ÔÜá´©Å  Fundo 25/25: CITY11 j├í existe - pulando
+
+ÔØî Erro: division by zero
+python.exe : Traceback (most recent call last):
+No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate_all.ps1:81 caractere:9
++         & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath ...
++         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\generate_funds.py", line 237, in <module>
+    generate_funds()
+    ~~~~~~~~~~~~~~^^
+  File "C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\Backend\scripts\generate_funds.py", line 197, in generate_funds
+    preco_medio = sum(f['price'] for f in fundos_criados) / len(fundos_criados)
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+ZeroDivisionError: division by zero

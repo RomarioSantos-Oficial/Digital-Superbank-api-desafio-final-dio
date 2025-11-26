@@ -83,3 +83,16 @@ No C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio\populate
     return codecs.charmap_encode(input,self.errors,encoding_table)[0]
            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f680' in position 0: character maps to <undefined>
+­ƒÜÇ Inicializando banco de dados...
+Ô£à Tabelas criadas
+
+­ƒôê Criando ativos de investimento...
+ÔÜá´©Å  Ativos j├í existem no banco de dados
+
+Ô£¿ Inicializa├º├úo conclu├¡da!
+
+­ƒôØ Pr├│ximos passos:
+1. Execute: python main.py
+2. Acesse: http://localhost:8000/docs
+3. Registre um usu├írio em /api/v1/auth/register
+4. Fa├ºa login em /api/v1/auth/login
