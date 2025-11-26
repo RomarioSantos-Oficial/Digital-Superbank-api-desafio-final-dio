@@ -1,1 +1,28 @@
+# Ignorar arquivos de banco de dados locais e arquivos temporários desta pasta
+# Essas entradas previnem que arquivos SQLite e logs locais entrem no controle de versão
+
+# Bancos SQLite gerados localmente
+digital_superbank.db
+chatbot.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Journals / WAL/ SHM
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Dumps e exportações
+*.sql
+*.dump
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.bak
+
+# Outros (cache, pycache)
+__pycache__/
+*.pyc
 
