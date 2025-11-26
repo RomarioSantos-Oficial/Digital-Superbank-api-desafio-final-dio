@@ -2,7 +2,7 @@
 📈 DIGITAL SUPERBANK - AÇÕES DISPONÍVEIS PARA INVESTIMENTO
 ════════════════════════════════════════════════════════════════════════════════
 
-Data de Criação: 26/11/2025 11:39:23
+Data de Criação: 26/11/2025 13:49:30
 Total de Ações: 30
 
 ════════════════════════════════════════════════════════════════════════════════
@@ -13,52 +13,52 @@ Total de Ações: 30
 🏢 AETH3 - AetherNet Solutions
    Preço Atual: R$     120.50
    Volatilidade:     35.0%
-   Variação 24h:    -1.82%
+   Variação 24h:    +2.63%
 
 🏢 CPYTO - CryptoNova Tech
    Preço Atual: R$      85.30
    Volatilidade:     40.0%
-   Variação 24h:    +0.41%
+   Variação 24h:    -3.45%
 
 🏢 BLCKCHN - BlockChain Systems
    Preço Atual: R$     156.80
    Volatilidade:     38.0%
-   Variação 24h:    +1.76%
+   Variação 24h:    +1.47%
 
 🏢 QNTM4 - Quantum Computing SA
    Preço Atual: R$     210.00
    Volatilidade:     42.0%
-   Variação 24h:    +1.01%
+   Variação 24h:    -2.48%
 
 🏢 AIML3 - AI & Machine Learning Corp
    Preço Atual: R$     178.50
    Volatilidade:     36.0%
-   Variação 24h:    +3.31%
+   Variação 24h:    +2.70%
 
 🏢 CYBR4 - CyberSec Defense
    Preço Atual: R$      92.40
    Volatilidade:     33.0%
-   Variação 24h:    -2.07%
+   Variação 24h:    +4.12%
 
 🏢 CLOD3 - CloudNet Brasil
    Preço Atual: R$     145.20
    Volatilidade:     35.0%
-   Variação 24h:    +3.37%
+   Variação 24h:    +1.89%
 
 🏢 SOFT4 - SoftDev Solutions
    Preço Atual: R$      67.80
    Volatilidade:     32.0%
-   Variação 24h:    +0.36%
+   Variação 24h:    -4.92%
 
 🏢 DATA3 - DataAnalytics Pro
    Preço Atual: R$     134.90
    Volatilidade:     37.0%
-   Variação 24h:    +4.46%
+   Variação 24h:    +2.69%
 
 🏢 TECH4 - TechVision International
    Preço Atual: R$     198.60
    Volatilidade:     39.0%
-   Variação 24h:    -3.14%
+   Variação 24h:    +1.43%
 
 
 📊 ENERGY
@@ -67,37 +67,37 @@ Total de Ações: 30
 🏢 SLAR3 - Solar Energy Brasil
    Preço Atual: R$      45.80
    Volatilidade:     28.0%
-   Variação 24h:    -4.47%
+   Variação 24h:    -2.44%
 
 🏢 WNDP4 - Wind Power SA
    Preço Atual: R$      52.30
    Volatilidade:     26.0%
-   Variação 24h:    +3.53%
+   Variação 24h:    -4.54%
 
 🏢 HYDR3 - Hydro Clean Energy
    Preço Atual: R$      38.90
    Volatilidade:     25.0%
-   Variação 24h:    +2.88%
+   Variação 24h:    -4.65%
 
 🏢 NUCL4 - Nuclear Power Tech
    Preço Atual: R$      89.50
    Volatilidade:     30.0%
-   Variação 24h:    -4.03%
+   Variação 24h:    +1.20%
 
 🏢 BIOF3 - BioFuel Innovation
    Preço Atual: R$      41.20
    Volatilidade:     27.0%
-   Variação 24h:    +4.12%
+   Variação 24h:    -4.46%
 
 🏢 GEOT4 - GeoThermal Systems
    Preço Atual: R$      55.70
    Volatilidade:     29.0%
-   Variação 24h:    +4.94%
+   Variação 24h:    +1.23%
 
 🏢 ENRG3 - Energy Renewables
    Preço Atual: R$      73.40
    Volatilidade:     31.0%
-   Variação 24h:    +2.41%
+   Variação 24h:    +3.30%
 
 
 📊 FINANCE
@@ -106,32 +106,32 @@ Total de Ações: 30
 🏢 BANK4 - SuperBank Digital
    Preço Atual: R$      28.90
    Volatilidade:     22.0%
-   Variação 24h:    +3.11%
+   Variação 24h:    -1.99%
 
 🏢 INVE3 - InvestPro Holding
    Preço Atual: R$      34.50
    Volatilidade:     24.0%
-   Variação 24h:    -0.92%
+   Variação 24h:    -2.94%
 
 🏢 FINT4 - FinTech Solutions
    Preço Atual: R$      42.80
    Volatilidade:     26.0%
-   Variação 24h:    +2.37%
+   Variação 24h:    +2.21%
 
 🏢 CRED3 - CreditFast Brasil
    Preço Atual: R$      31.20
    Volatilidade:     23.0%
-   Variação 24h:    +3.06%
+   Variação 24h:    +0.60%
 
 🏢 SEGR4 - Seguros Premium SA
    Preço Atual: R$      48.60
    Volatilidade:     25.0%
-   Variação 24h:    +1.13%
+   Variação 24h:    -0.05%
 
 🏢 ASSE3 - Asset Management Corp
    Preço Atual: R$      55.90
    Volatilidade:     27.0%
-   Variação 24h:    +2.46%
+   Variação 24h:    -3.26%
 
 
 📊 HEALTH
@@ -140,22 +140,22 @@ Total de Ações: 30
 🏢 HLTH3 - HealthCare Plus
    Preço Atual: R$     112.40
    Volatilidade:     20.0%
-   Variação 24h:    -3.76%
+   Variação 24h:    +3.03%
 
 🏢 PHMA4 - Pharma Solutions
    Preço Atual: R$      95.80
    Volatilidade:     22.0%
-   Variação 24h:    -1.07%
+   Variação 24h:    +4.32%
 
 🏢 HOSP3 - Hospital Network SA
    Preço Atual: R$      78.30
    Volatilidade:     19.0%
-   Variação 24h:    +2.94%
+   Variação 24h:    -4.14%
 
 🏢 BIOT4 - BioTech Research
    Preço Atual: R$     134.70
    Volatilidade:     24.0%
-   Variação 24h:    -0.30%
+   Variação 24h:    +1.11%
 
 
 📊 RETAIL
@@ -164,17 +164,17 @@ Total de Ações: 30
 🏢 RETR3 - Retail Market SA
    Preço Atual: R$      25.60
    Volatilidade:     28.0%
-   Variação 24h:    +4.21%
+   Variação 24h:    -3.58%
 
 🏢 AGRO4 - AgroBusiness Brasil
    Preço Atual: R$      38.40
    Volatilidade:     26.0%
-   Variação 24h:    -0.77%
+   Variação 24h:    +4.25%
 
 🏢 LOGX3 - Logistics Express
    Preço Atual: R$      44.90
    Volatilidade:     27.0%
-   Variação 24h:    +1.64%
+   Variação 24h:    +0.99%
 
 
 ════════════════════════════════════════════════════════════════════════════════

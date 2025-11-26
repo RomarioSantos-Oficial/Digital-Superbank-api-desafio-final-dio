@@ -47,10 +47,6 @@ try {
     exit 1
 }
 
-# Forçar UTF-8 nas execuções do Python no Windows
-$env:PYTHONUTF8 = "1"
-$env:PYTHONIOENCODING = "utf-8"
-
 # Verificar Node.js
 try {
     $nodeVersion = node --version 2>$null
@@ -89,8 +85,8 @@ if (!(Test-Path $venvPath)) {
 if (Test-Path $backendRequirements) {
     Write-Host "[!] Instalando/Atualizando dependencias do Backend..." -ForegroundColor Yellow
     
-    # Usa o pip dentro do venv para garantir a instalacao no ambiente correto (usando Python do venv)
-    & "$venvPath\Scripts\python.exe" -X utf8 -m pip install -r $backendRequirements
+    # Usa o pip dentro do venv para garantir a instalacao no ambiente correto
+    & "$venvPath\Scripts\pip" install -r $backendRequirements
     
     Write-Host "[OK] Dependencias do Backend instaladas." -ForegroundColor Green
 } else {
@@ -101,8 +97,8 @@ if (Test-Path $backendRequirements) {
 if (Test-Path $rootRequirements) {
     Write-Host "[!] Instalando/Atualizando dependencias da Raiz do Projeto..." -ForegroundColor Yellow
     
-    # Usa o pip dentro do venv para a instalacao (via python -X utf8 -m pip)
-    & "$venvPath\Scripts\python.exe" -X utf8 -m pip install -r $rootRequirements
+    # Usa o pip dentro do venv para a instalacao
+    & "$venvPath\Scripts\pip" install -r $rootRequirements
     
     Write-Host "[OK] Dependencias da Raiz instaladas." -ForegroundColor Green
 } else {
@@ -164,7 +160,7 @@ Write-Host ""
 $backendScript = @"
 Set-Location '$backendPath'
 & '$venvPath\Scripts\Activate.ps1'
-    python -X utf8 main.py
+python main.py
 "@
 
 # Script para Frontend (Roda o npm run dev)

@@ -41,10 +41,6 @@ Write-Host ""
 try {
     $pythonVersion = python --version 2>$null
     Write-Host "[OK] Python: $pythonVersion" -ForegroundColor Green
-
-# Forçar UTF-8 nas execuções do Python no Windows
-$env:PYTHONUTF8 = "1"
-$env:PYTHONIOENCODING = "utf-8"
 } catch {
     Write-Host "[X] Python nao encontrado!" -ForegroundColor Red
     exit 1
@@ -109,7 +105,7 @@ if ($InitSetup) {
     Write-Host "[>] Modo InitSetup - instalando dependências e popular DB..." -ForegroundColor Cyan
     Set-Location $backendPath
     Write-Host "[>] Instalando requisitos do Backend via venv..." -ForegroundColor Gray
-        & $venvPython -X utf8 -m pip install -r requirements.txt
+    & $venvPython -m pip install -r requirements.txt
     if ($LASTEXITCODE -ne 0) { Write-Host "[X] Falha ao instalar dependências do Backend" -ForegroundColor Red; if (-not $ContinueOnError) { exit 1 } }
 
     # Instalar dependências do frontend se falta (recheck)
