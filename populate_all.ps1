@@ -56,13 +56,17 @@ if (-not $pythonCmd) {
 
 Write-Log "Usando comando Python: $pythonCmd"
 
+# Forçar UTF-8 no Python no Windows (para evitar erros com emojis e símbolos)
+$env:PYTHONUTF8 = "1"
+$env:PYTHONIOENCODING = "utf-8"
+
 function Run-Script {
     param(
         [string]$ScriptPath,
         [string]$Arguments = ""
     )
 
-    $fullCmd = "& $pythonCmd `"$ScriptPath`" $Arguments"
+    $fullCmd = "& $pythonCmd -X utf8 `"$ScriptPath`" $Arguments"
     Write-Log "Executando: $fullCmd"
 
     try {
@@ -88,7 +92,7 @@ if ($InstallDeps) {
     Write-Log "Instalando dependências do Backend/requirements.txt..."
     $reqFile = Join-Path $BackendDir 'requirements.txt'
     if (Test-Path $reqFile) {
-        iex "& $pythonCmd -m pip install -r `"$reqFile`""
+        iex "& $pythonCmd -X utf8 -m pip install -r `"$reqFile`""
         if (!$LASTEXITCODE -or $LASTEXITCODE -eq 0) {
             Write-Log "Dependências instaladas com sucesso."
         } else {
