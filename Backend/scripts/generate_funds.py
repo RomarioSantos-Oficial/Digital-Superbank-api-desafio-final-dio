@@ -14,7 +14,7 @@ from src.database.connection import SessionLocal
 from src.models.investment import Asset, AssetType, AssetCategory
 
 
-def generate_funds():
+def generate_funds(update_existing: bool = False):
     """Gera fundos imobiliários."""
     db = SessionLocal()
     
@@ -75,8 +75,16 @@ def generate_funds():
             # Verifica se já existe
             existing = db.query(Asset).filter(Asset.symbol == symbol).first()
             if existing:
-                print(f"⚠️  Fundo {i}/{len(fundos)}: {symbol} já existe - pulando")
-                continue
+                if update_existing:
+                    existing.name = name
+                    existing.current_price = price
+                    existing.description = desc
+                    existing.category = AssetCategory.FIXED_INCOME
+                    db.add(existing)
+                    print(f"🔄 Fundo {i}/{len(fundos)}: {symbol} já existe - atualizado")
+                else:
+                    print(f"⚠️  Fundo {i}/{len(fundos)}: {symbol} já existe - pulando")
+                    continue
             
             # Calcula variação 24h aleatória (fundos são mais estáveis)
             price_change = random.uniform(-2.0, 2.0)
@@ -234,4 +242,8 @@ def generate_funds():
 
 
 if __name__ == "__main__":
-    generate_funds()
+    import argparse
+    parser = argparse.ArgumentParser(description='Gerar fundos imobiliários')
+    parser.add_argument('--update', dest='update', action='store_true', help='Atualiza ativos existentes em vez de pular')
+    args = parser.parse_args()
+    generate_funds(update_existing=args.update)

@@ -2,11 +2,17 @@
 Script para adicionar ativos de renda fixa ao banco de dados
 CDB, LCI, LCA, Tesouro Direto, Fundos DI, etc.
 """
-from src.database.connection import SessionLocal
-from src.models.investment import Asset, AssetType, AssetCategory
+import sys
+import os
 from datetime import datetime
 
-def add_fixed_income_assets():
+# Garante que o diretório Backend (pai) esteja no sys.path para permitir imports absolutos de `src`
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.database.connection import SessionLocal
+from src.models.investment import Asset, AssetType, AssetCategory
+
+def add_fixed_income_assets(update_existing: bool = False):
     db = SessionLocal()
     
     try:
@@ -167,11 +173,19 @@ def add_fixed_income_assets():
             existing = db.query(Asset).filter(
                 Asset.symbol == asset_data["symbol"]
             ).first()
-            
             if existing:
-                print(f"⏭️  {asset_data['symbol']:8s} - Já existe, pulando...")
-                skipped_count += 1
-                continue
+                if update_existing:
+                    existing.name = asset_data['name']
+                    existing.current_price = asset_data['current_price']
+                    existing.description = asset_data['description']
+                    existing.category = asset_data['category']
+                    db.add(existing)
+                    print(f"🔄 {asset_data['symbol']:8s} - Já existe, atualizado")
+                    added_count += 1
+                else:
+                    print(f"⏭️  {asset_data['symbol']:8s} - Já existe, pulando...")
+                    skipped_count += 1
+                    continue
             
             # Cria novo ativo
             asset = Asset(
@@ -206,4 +220,8 @@ def add_fixed_income_assets():
         db.close()
 
 if __name__ == "__main__":
-    add_fixed_income_assets()
+    import argparse
+    parser = argparse.ArgumentParser(description='Adicionar ativos de renda fixa')
+    parser.add_argument('--update', dest='update', action='store_true', help='Atualiza ativos existentes em vez de pular')
+    args = parser.parse_args()
+    add_fixed_income_assets(update_existing=args.update)

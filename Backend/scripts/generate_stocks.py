@@ -14,7 +14,7 @@ from src.database.connection import SessionLocal
 from src.models.investment import Asset, AssetType, AssetCategory
 
 
-def generate_stocks():
+def generate_stocks(update_existing: bool = False):
     """Gera 30 ações de empresas."""
     db = SessionLocal()
     
@@ -72,8 +72,17 @@ def generate_stocks():
             # Verifica se já existe
             existing = db.query(Asset).filter(Asset.symbol == symbol).first()
             if existing:
-                print(f"⚠️  Ação {i}/30: {symbol} já existe - pulando")
-                continue
+                if update_existing:
+                    # Atualiza os campos relevantes
+                    existing.name = name
+                    existing.current_price = price
+                    existing.description = f"Empresa do setor {category.value} com foco em inovação e crescimento sustentável."
+                    existing.category = category
+                    db.add(existing)
+                    print(f"🔄 Ação {i}/30: {symbol} já existe - atualizada")
+                else:
+                    print(f"⚠️  Ação {i}/30: {symbol} já existe - pulando")
+                    continue
             
             # Calcula variação 24h aleatória
             price_change = random.uniform(-5.0, 5.0)
@@ -181,4 +190,8 @@ def generate_stocks():
 
 
 if __name__ == "__main__":
-    generate_stocks()
+    import argparse
+    parser = argparse.ArgumentParser(description='Gerar ações de demonstração')
+    parser.add_argument('--update', dest='update', action='store_true', help='Atualiza ativos existentes em vez de pular')
+    args = parser.parse_args()
+    generate_stocks(update_existing=args.update)

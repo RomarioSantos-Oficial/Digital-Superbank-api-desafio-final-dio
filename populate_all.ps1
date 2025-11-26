@@ -13,6 +13,7 @@ Parâmetros:
 
 Uso exemplo:
   .\populate_all.ps1 -InstallDeps -RunCandles -Days 7
+    .\populate_all.ps1 -InstallDeps -UpdateAssets -RunCandles -Days 7
 #>
 param (
     [switch]$InstallDeps = $false,
@@ -21,6 +22,7 @@ param (
     [switch]$ExcludeChatbot = $false,
     [switch]$IncludeInteractiveChatbot = $false,
     [switch]$ContinueOnError = $false
+    ,[switch]$UpdateAssets = $false
 )
 
 function Write-Log {
@@ -43,8 +45,37 @@ if (!(Test-Path $BackendDir)) {
 
 Set-Location $BackendDir
 
+# Ensure database folders exist (sqlite needs folder existing)
+$dbFolder = Join-Path $BackendDir 'src\database\data'
+if (!(Test-Path $dbFolder)) {
+    Write-Log "Criando pasta de dados do banco: $dbFolder"
+    New-Item -Path $dbFolder -ItemType Directory -Force | Out-Null
+}
+
 # Tenta localizar python (fallback para "py")
-$pythonCmd = (Get-Command python -ErrorAction SilentlyContinue).Source
+function Get-PythonCmd {
+    # 1) Prefer venv python if present
+    $venvPython = Join-Path $BackendDir '.venv\Scripts\python.exe'
+    if (Test-Path $venvPython) {
+        return $venvPython
+    }
+
+    # 2) Try 'python' or 'py' in PATH
+    $cmd = (Get-Command python -ErrorAction SilentlyContinue)
+    if ($cmd -and $cmd.Source) { return $cmd.Source }
+    $cmd = (Get-Command py -ErrorAction SilentlyContinue)
+    if ($cmd -and $cmd.Source) { return $cmd.Source }
+
+    # 3) Try where.exe for python executables
+    try {
+        $where = & where.exe python 2>$null
+        if ($where) { return $where[0] }
+    } catch {}
+
+    return $null
+}
+
+$pythonCmd = Get-PythonCmd
 if (-not $pythonCmd) {
     $pythonCmd = (Get-Command py -ErrorAction SilentlyContinue).Source
 }
@@ -61,13 +92,26 @@ function Run-Script {
         [string]$ScriptPath,
         [string]$Arguments = ""
     )
-
-    $fullCmd = "& $pythonCmd `"$ScriptPath`" $Arguments"
+    $fullCmd = "`"$pythonCmd`" `"$ScriptPath`" $Arguments"
     Write-Log "Executando: $fullCmd"
 
+    $startInfo = @{ }
+
+    # Log file for each script
+    $scriptNameSafe = ([IO.Path]::GetFileName($ScriptPath)).Replace(' ', '_')
+    $logFilePath = Join-Path $BackendDir "logs\$scriptNameSafe.log"
+    if (!(Test-Path (Split-Path $logFilePath))) { New-Item -Path (Split-Path $logFilePath) -ItemType Directory -Force | Out-Null }
+    Write-Log "Capturando logs em: $logFilePath"
+
+    if (!(Test-Path $ScriptPath)) {
+        Write-Log "Arquivo não encontrado: $ScriptPath" "WARN"
+        if (-not $ContinueOnError) { exit 1 }
+        return $false
+    }
+
     try {
-        # Executa no contexto atual. Poderíamos usar Start-Process se preferir separar o processo.
-        iex $fullCmd
+        # Executa explicitamente, capturando saída para log
+        & $pythonCmd $ScriptPath $Arguments *>&1 | Out-File -FilePath $logFilePath -Encoding utf8 -Append
         if (!$LASTEXITCODE -or $LASTEXITCODE -eq 0) {
             Write-Log "Sucesso: $ScriptPath"
             return $true
@@ -120,6 +164,9 @@ if (-not $ExcludeChatbot) {
 
 # Roda em sequência
 foreach ($job in $jobs) {
+    if ($UpdateAssets -and ($job.script -like '*stocks*' -or $job.script -like '*funds*' -or $job.script -like '*fixed*')) {
+        $job.args = '--update'
+    }
     $ok = Run-Script -ScriptPath $job.script -Arguments $job.args
     if (-not $ok -and -not $ContinueOnError) {
         Write-Log "Abortando sequência devido a erro em $($job.script)" "ERROR"
