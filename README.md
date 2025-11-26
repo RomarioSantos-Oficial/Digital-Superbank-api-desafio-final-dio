@@ -74,7 +74,7 @@ Este passo prepara TUDO: venv, pacotes, bancos de dados, chatbot.
 Abra o PowerShell na raiz do projeto e rode:
 
 ```powershell
-cd C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio
+cd Digital-Superbank-api-desafio-final-dio
 .\start.ps1 -InitSetup
 ```
 
@@ -367,7 +367,7 @@ This step prepares EVERYTHING: venv, dependencies, databases, chatbot.
 Run in PowerShell from the project root:
 
 ```powershell
-cd C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio
+cd Digital-Superbank-api-desafio-final-dio
 ./start.ps1 -InitSetup
 ```
 
