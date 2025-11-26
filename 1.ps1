@@ -1,6 +1,15 @@
 # Script CORRIGIDO e AUTÔNOMO para iniciar Backend e Frontend
 # Usa Start-Process para abrir janelas separadas para cada serviço.
 
+param(
+    [switch]$InitSetup = $false, # Força a execução do populate_all mesmo se venv existir
+    [switch]$RunCandles = $false,
+    [int]$CandlesDays = 7,
+    [switch]$ExcludeChatbot = $false,
+    [switch]$IncludeInteractiveChatbot = $false,
+    [switch]$ContinueOnError = $false
+)
+
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "   Digital Superbank - Inicializador   " -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
@@ -68,6 +77,8 @@ if (!(Test-Path $venvPath)) {
     
     Pop-Location
     Write-Host "[OK] Ambiente virtual criado." -ForegroundColor Green
+    # mark that venv was created
+    $venvCreated = $true
 }
 
 # B. Instalar dependências do Backend
@@ -92,6 +103,32 @@ if (Test-Path $rootRequirements) {
     Write-Host "[OK] Dependencias da Raiz instaladas." -ForegroundColor Green
 } else {
     Write-Host "[>] requirements.txt na Raiz nao encontrado. Ignorando instalacao extra." -ForegroundColor Gray
+}
+
+# Detecta se devemos executar populate_all.ps1
+$dbFile = Join-Path $backendPath "src\database\data\digital_superbank.db"
+$dbMissing = -not (Test-Path $dbFile)
+if ($dbMissing) { Write-Host "[!] DB principal não encontrado: $dbFile" -ForegroundColor Yellow }
+
+# Se venv foi criado, se o usuário pediu InitSetup ou se DB estiver faltando, rodar populate
+if ($InitSetup -or $venvCreated -or $dbMissing) {
+    $populateScript = Join-Path $rootPath 'populate_all.ps1'
+    if (Test-Path $populateScript) {
+        Write-Host "[>] Executando populate_all.ps1 para criar tabelas e popular dados..." -ForegroundColor Gray
+        $argsList = @()
+        $argsList += '-InstallDeps'
+        if ($RunCandles) { $argsList += '-RunCandles'; $argsList += "-Days $CandlesDays" }
+        if ($ExcludeChatbot) { $argsList += '-ExcludeChatbot' }
+        if ($IncludeInteractiveChatbot) { $argsList += '-IncludeInteractiveChatbot' }
+        if ($ContinueOnError) { $argsList += '-ContinueOnError' }
+        $argLine = $argsList -join ' '
+        Push-Location $rootPath
+        iex "& `"$populateScript`" $argLine"
+        Pop-Location
+    } else {
+        Write-Host "[WARN] populate_all.ps1 nao encontrado em: $rootPath" -ForegroundColor Yellow
+        if (-not $ContinueOnError) { Write-Host "Abortando devido a falta de populate_all.ps1" -ForegroundColor Red; exit 1 }
+    }
 }
 
 Write-Host ""

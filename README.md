@@ -1,341 +1,565 @@
-# 🏦 Digital Superbank
+# 🏦 Digital Superbank — README Oficial (Versão Focada e Organizada)
 
-Sistema bancário completo e profissional com Backend (FastAPI) e Frontend (React + Vite).
+Bem-vindo ao **Digital Superbank**, um sistema bancário completo criado para fins **didáticos e educacionais**, simulando um banco real com:
 
-## ⭐ Funcionalidades Principais
+* **Backend FastAPI**
+* **Frontend React + Vite**
+* **Chatbot integrado**
+* **Simulador de mercado com velas (candles)**
 
-### 💳 Sistema Bancário Completo
-- ✅ **Múltiplas Contas**: Corrente, Poupança e Investimento
-- ✅ **Transações**: Depósito, Saque, Transferência e PIX
-- ✅ **Cartões de Crédito**: Visualização 3D, múltiplas bandeiras (Visa, Mastercard, Elo)
-- ✅ **Extrato Detalhado**: Filtros por período e tipo de transação
-- ✅ **Autenticação JWT**: Sistema seguro com tokens
-
-### 📈 Sistema de Investimentos em Tempo Real
-- ✅ **Gráficos de Velas (Candlestick)**: Visualização profissional com Chart.js
-- ✅ **10 Intervalos de Tempo**: 1s, 5s, 10s, 30s, 1m, 5m, 15m, 1h, 4h, 1d
-- ✅ **WebSocket em Tempo Real**: Atualização automática a cada 1 segundo
-- ✅ **Simulador de Mercado**: Volatilidade realista (0.1% - 0.3%)
-- ✅ **Compra/Venda de Ativos**: Ações e Fundos Imobiliários
-- ✅ **Dashboard de Trading**: Página dedicada com fullscreen
-- ✅ **Watchlist**: Acompanhe múltiplos ativos simultaneamente
-- ✅ **Estatísticas**: Máxima, Mínima, Volume, Variação 24h
-
-### 🤖 Chatbot Inteligente
-- ✅ **81 Perguntas e Respostas**: Base de conhecimento completa
-- ✅ **Busca Semântica**: Encontra respostas relevantes
-- ✅ **Interface Moderna**: Chat em tempo real
-
-### 🎨 Interface Premium
-- ✅ **Design Moderno**: Tailwind CSS com gradientes e animações
-- ✅ **Responsivo**: Funciona em desktop, tablet e mobile
-- ✅ **Animações Fluidas**: Framer Motion
-- ✅ **Dark Mode Ready**: Cards com glassmorphism
-
-## 🚀 Início Rápido
-
-### Opção 1: Script Automático (Recomendado) ⚡
-
-Execute o script que inicia Backend e Frontend automaticamente:
-
-```powershell
-.\start.ps1
-```
-
-O script irá:
-- ✅ Verificar dependências (Python e Node.js)
-- ✅ Instalar dependências automaticamente
-- ✅ Iniciar o Backend em http://localhost:8000
-- ✅ Iniciar o Frontend em http://localhost:3000
-- ✅ Exibir logs de ambos os serviços em tempo real
-
-### Opção 2: Manual
-
-#### Backend (FastAPI)
-
-```powershell
-cd Backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-python main.py
-```
-
-#### Frontend (React + Vite)
-
-```powershell
-cd Frontend
-npm install
-npm run dev
-```
-
-## 📂 Estrutura do Projeto
-
-```
-Digital Superbank/
-├── Backend/                 # API FastAPI
-│   ├── main.py             # Entrada da API
-│   ├── requirements.txt    # Dependências Python
-│   ├── src/                # Código fonte
-│   │   ├── api/           # Endpoints da API
-│   │   ├── models/        # Modelos de dados
-│   │   ├── services/      # Lógica de negócio
-│   │   ├── database/      # Configuração de BD
-│   │   └── configs/       # Configurações
-│   └── tests/             # Testes
-│
-├── Frontend/               # App React
-│   ├── src/
-│   │   ├── components/    # Componentes React
-│   │   ├── pages/         # Páginas
-│   │   ├── services/      # Serviços de API
-│   │   ├── context/       # Context API
-│   │   ├── hooks/         # Custom Hooks
-│   │   └── utils/         # Utilitários
-│   ├── package.json       # Dependências Node
-│   └── vite.config.js     # Configuração Vite
-│
-└── start.ps1              # Script de inicialização
-```
-
-## 🌐 URLs
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:8000
-- **Documentação API**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
-## 🎯 Funcionalidades Detalhadas
-
-### Backend (FastAPI)
-- ✅ **Autenticação JWT**: Login seguro com tokens e refresh tokens
-- ✅ **CRUD Completo**: Contas, Usuários, Transações, Cartões
-- ✅ **Transações Bancárias**: Depósito, Saque, Transferência, PIX
-- ✅ **Cartões de Crédito**: Geração automática, múltiplas bandeiras
-- ✅ **Sistema de Investimentos**: 
-  - Ações (STOCK) e Fundos Imobiliários (FUND)
-  - Velas em 10 intervalos diferentes (1s até 1d)
-  - Simulador de mercado em tempo real
-  - Geração automática de OHLCV (Open, High, Low, Close, Volume)
-- ✅ **Chatbot Inteligente**: 81 Q&A sobre o sistema
-- ✅ **WebSocket**: Broadcast de preços a cada 1 segundo
-- ✅ **Banco de Dados**: SQLite com SQLAlchemy ORM
-- ✅ **Documentação**: Swagger UI e ReDoc automáticos
-- ✅ **Validação**: Pydantic schemas em todos endpoints
-- ✅ **CORS Configurado**: Pronto para produção
-
-### Frontend (React + Vite)
-- ✅ **Interface Premium**: Design moderno com Tailwind CSS
-- ✅ **Dashboard Interativo**: Visão geral de contas e saldo
-- ✅ **Gerenciamento de Contas**: Criar, visualizar, editar
-- ✅ **Módulo de Transações**: 
-  - Formulários intuitivos
-  - Histórico completo
-  - Filtros avançados
-- ✅ **Cartões 3D**: Visualização realista com flip animation
-- ✅ **Investimentos Profissionais**:
-  - Gráficos de velas (Candlestick Chart)
-  - 10 intervalos de tempo
-  - Trading modal com compra/venda
-  - Dashboard dedicado com fullscreen
-  - Watchlist de ativos
-  - WebSocket em tempo real
-- ✅ **Chatbot**: Interface de chat fluida
-- ✅ **Perfil do Usuário**: Edição de dados pessoais
-- ✅ **Animações**: Framer Motion para transições suaves
-- ✅ **Responsivo**: Mobile-first design
-- ✅ **Performance**: Vite para build ultra-rápido
-
-## 📋 Pré-requisitos
-
-- **Python** 3.8 ou superior
-- **Node.js** 16 ou superior
-- **npm** ou **yarn**
-
-## 🛠️ Tecnologias
-
-### Backend
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- JWT Authentication
-- WebSocket
-- SQLite
-
-### Frontend
-- React 18
-- Vite
-- Tailwind CSS
-- Framer Motion
-- React Router DOM
-- Axios
-- React Query
-- React Hook Form
-- Chart.js
-
-## 📚 Documentação
-
-- [Backend README](./Backend/README.md)
-- [Frontend README](./Frontend/README.md)
-- [Instalação Frontend](./Frontend/INSTALACAO.md)
-
-## 🔧 Desenvolvimento
-
-### Backend
-
-```powershell
-# Ativar ambiente virtual
-cd Backend
-.\.venv\Scripts\Activate.ps1
-
-# Executar com reload automático
-uvicorn main:app --reload
-
-# Executar testes
-pytest
-```
-
-### Frontend
-
-```powershell
-cd Frontend
-
-# Desenvolvimento
-npm run dev
-
-# Build para produção
-npm run build
-
-# Preview da build
-npm run preview
-```
-
-## 🧪 Testes
-
-### Backend
-
-```powershell
-cd Backend
-pytest
-```
-
-### Frontend
-
-```powershell
-cd Frontend
-npm run test
-```
-
-## 📦 Build para Produção
-
-### Backend
-
-```powershell
-cd Backend
-pip install -r requirements.txt
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-### Frontend
-
-```powershell
-cd Frontend
-npm run build
-# Arquivos em: Frontend/dist/
-```
-
-## 🔒 Segurança
-
-- JWT Authentication
-- Senhas hasheadas com bcrypt
-- Validação de dados com Pydantic
-- CORS configurado
-- Sanitização de inputs
-
-## 🗂️ Scripts Úteis
-
-### Limpar Banco de Dados
-```powershell
-cd Backend
-python scripts/clear_personal_data.py
-```
-
-### Limpar Velas Antigas
-```powershell
-cd Backend
-python scripts/clean_old_candles.py
-```
-
-### Inicializar Banco
-```powershell
-cd Backend
-python scripts/init_db.py
-```
-
-### Popular Chatbot
-```powershell
-cd Backend
-python scripts/populate_chatbot.py
-```
-
-## 🐛 Troubleshooting
-
-### Backend não inicia
-
-1. Verifique se o Python está instalado: `python --version`
-2. Verifique se está na versão 3.8+
-3. Ative o ambiente virtual: `.\.venv\Scripts\Activate.ps1`
-4. Reinstale dependências: `pip install -r requirements.txt`
-5. Verifique se a porta 8000 está livre
-
-### Frontend não inicia
-
-1. Verifique se o Node.js está instalado: `node --version`
-2. Verifique se está na versão 16+
-3. Delete `node_modules` e reinstale: `rm -r node_modules; npm install`
-4. Limpe o cache: `npm cache clean --force`
-5. Verifique se a porta 3000 está livre
-
-### WebSocket não conecta
-
-1. Certifique-se que o Backend está rodando
-2. Verifique o console do navegador para erros
-3. Confirme que está acessando http://localhost:3000
-
-### Gráficos não aparecem
-
-1. Abra o DevTools (F12) e verifique erros
-2. Verifique se há velas no banco de dados
-3. Aguarde alguns segundos para o simulador gerar velas
-4. Recarregue a página
-
-### Erro de CORS
-
-Já configurado! Se persistir:
-1. Verifique se o Backend está em http://localhost:8000
-2. Verifique se o Frontend está em http://localhost:3000
-
-## 📊 Estrutura de Dados
-
-### Velas (Candles)
-- **Intervalos**: 1s, 5s, 10s, 30s, 1m, 5m, 15m, 1h, 4h, 1d
-- **Campos**: Open, High, Low, Close, Volume, Timestamp
-- **Atualização**: Tempo real via WebSocket
-
-### Investimentos
-- **Tipos**: STOCK (Ações), FUND (Fundos Imobiliários)
-- **Categorias**: TECHNOLOGY, REAL_ESTATE, FINANCE, etc.
-- **Dados**: Preço atual, variação 24h, volume, volatilidade
-
-## 📝 Licença
-
-Este projeto é parte do Digital Superbank.
-
-## 👨‍💻 Desenvolvimento
-
-Desenvolvido com ❤️ usando FastAPI e React.
+> ⚠️ **Aviso:** Todos os dados aqui são fictícios. Para uso comercial, entre em contato: **[Euoromario@gmail.com](mailto:Euoromario@gmail.com)**
 
 ---
 
-**Para iniciar rapidamente, execute: `.\start.ps1`** 🚀
-#
+## 📌 Índice
+
+* Visão Geral do Projeto
+* Pré‑requisitos
+* Instalação inicial (primeiro uso)
+* Uso diário
+* Scripts de manutenção
+* Flags úteis
+* Estrutura de pastas
+* Solução de problemas
+* Contato / Licença
+
+---
+
+# 📦 1) Visão Geral do Projeto
+
+### 🔧 Backend — FastAPI
+
+* Autenticação JWT
+* Contas, transações, cartões, investimentos
+* WebSocket com preços em tempo real
+* Gráficos de velas (OHLCV)
+* Banco SQLite
+
+### 💻 Frontend — React + Vite
+
+* Dashboard completo
+* Cartões 3D
+* Sistema de investimentos profissional
+* Chatbot integrado
+* Tema moderno com Tailwind + animações
+
+### 🤖 Chatbot
+
+* Base de conhecimento própria
+* Busca semântica
+
+### 🛠️ Scripts
+
+* População de usuários, ativos, fundos, velas
+* População do banco do chatbot
+* Reset e manutenção geral
+
+---
+
+# ⚙️ 2) Pré‑requisitos
+
+* **Windows + PowerShell**
+* **Python 3.8+** configurado no PATH
+* **Node.js 16+**
+* Recomendado: Fechar servidores antes de rodar scripts que escrevem no banco
+
+---
+
+# 🚀 3) Instalação Inicial (Primeiro Uso)
+
+Este passo prepara TUDO: venv, pacotes, bancos de dados, chatbot.
+
+### 📍 Etapas
+
+Abra o PowerShell na raiz do projeto e rode:
+
+```powershell
+cd C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio
+.\start.ps1 -InitSetup
+```
+
+### O que este comando faz automaticamente:
+
+* Cria ambiente virtual `.venv` (se não existir)
+* Instala dependências do Backend
+* Instala as dependências do Frontend (`npm install`)
+* Popula o banco principal e o banco do Chatbot
+* Gera arquivos: `pessoa.txt`, `acao.txt`, `fundo_investimento.txt`, `chatbot.txt`
+
+### Opções adicionais:
+
+Gerar velas históricas:
+
+```powershell
+.\start.ps1 -InitSetup -RunCandles -CandlesDays 7
+```
+
+Pular população do Chatbot:
+
+```powershell
+.\start.ps1 -InitSetup -ExcludeChatbot
+```
+
+---
+
+# 🖥️ 4) Uso Diário (iniciar sistema normalmente)
+
+Após a primeira instalação, use:
+
+```powershell
+.\1.ps1
+```
+
+Isso irá:
+
+* Ativar ou criar o venv caso falte
+* Instalar dependências faltantes
+* Se necessário, executar `populate_all.ps1` (criação de tabelas e popular dados) — isto acontece quando `venv` foi criado agora, quando o DB principal está ausente, ou se você passou `-InitSetup`.
+* Iniciar Backend (8000)
+* Iniciar Frontend (3000)
+
+> Dica: `start.ps1` também funciona sem flags como inicializador rápido.
+
+### Parâmetros úteis para `1.ps1`
+- `-InitSetup` : força a execução de `populate_all.ps1` (útil para repopular os DBs antes de iniciar)
+- `-RunCandles` : gerar velas durante a execução do populate
+- `-CandlesDays <N>` : dias de velas a gerar
+- `-ExcludeChatbot` : pular popular o banco do Chatbot
+- `-IncludeInteractiveChatbot` : usar o populate interativo do Chatbot
+- `-ContinueOnError` : continuar mesmo após erros (útil em CI)
+
+Exemplos:
+```powershell
+# Iniciar normalmente
+.\1.ps1
+
+# Forçar setup + popular antes de iniciar
+.\1.ps1 -InitSetup
+
+# Forçar setup com velas
+.\1.ps1 -InitSetup -RunCandles -CandlesDays 7
+```
+
+---
+
+# 🔧 5) Scripts Úteis de Manutenção
+
+Localizados em: `Backend/scripts`
+
+### 📌 Banco principal
+
+Criar tabelas:
+
+```powershell
+python Backend/scripts/init_db.py
+```
+
+Ações:
+
+```powershell
+python Backend/scripts/generate_stocks.py
+```
+
+Fundos:
+
+```powershell
+python Backend/scripts/generate_funds.py
+```
+
+Renda fixa:
+
+```powershell
+python Backend/scripts/add_fixed_income_assets.py
+```
+
+Usuários demo:
+
+```powershell
+python Backend/scripts/generate_demo_users.py
+```
+
+Usuários variados:
+
+```powershell
+python Backend/scripts/generate_varied_users.py
+```
+
+### 📌 Banco do Chatbot
+
+Criar tabelas:
+
+```powershell
+python Backend/scripts/update_chatbot_db.py
+```
+
+População completa:
+
+```powershell
+python Backend/scripts/populate_chatbot_full.py
+```
+
+Interativo:
+
+```powershell
+python Backend/scripts/populate_chatbot.py
+```
+
+### 📌 Velas (candles)
+
+```powershell
+python Backend/scripts/generate_historical_candles.py --days 7
+```
+
+---
+
+# 🏷️ 6) Flags Principais
+
+### `start.ps1`
+
+* `-InitSetup` → instala tudo e popula bancos
+* `-RunCandles` → gerar velas
+* `-CandlesDays N` → quantidade de dias
+* `-ExcludeChatbot` → não popular chatbot
+* `-IncludeInteractiveChatbot` → versão interativa
+
+### `populate_all.ps1`
+
+* `-InstallDeps` → instala dependências
+* `-RunCandles`
+* `-Days N`
+* `-ExcludeChatbot`
+* `-IncludeInteractiveChatbot`
+* `-ContinueOnError`
+
+---
+
+# 📂 7) Estrutura do Projeto (Resumo)
+
+```
+Digital Superbank/
+├── Backend/
+│   ├── main.py
+│   ├── src/
+│   │   ├── api/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── database/
+│   │   └── configs/
+│   └── scripts/
+│
+├── Frontend/
+│   ├── src/components/
+│   ├── src/pages/
+│   ├── src/services/
+│   ├── vite.config.js
+│
+└── start.ps1
+```
+
+---
+
+# 🐛 8) Troubleshooting Rápido
+
+### ❗ `database is locked`
+
+Feche o uvicorn antes de rodar scripts.
+
+### ❗ `no such table: knowledge_base`
+
+Execute primeiro:
+
+```powershell
+python Backend/scripts/update_chatbot_db.py
+```
+
+### ❗ Erros no Frontend
+
+* Apague `node_modules`
+* Rode `npm install`
+* Verifique porta 3000
+
+### ❗ Erros no Backend
+
+* Ative venv: `.\.venv\Scripts\Activate.ps1`
+* Reinstale: `pip install -r requirements.txt`
+
+---
+
+# 📬 9) Contato / Licença
+
+Projeto educacional. Para uso comercial:
+**[Euoromario@gmail.com](mailto:Euoromario@gmail.com)**
+
+---
+
+
+# 🏦 Digital Superbank — Official README (English Version)
+
+Welcome to **Digital Superbank**, a complete educational banking system that simulates a real digital bank, featuring:
+
+* **FastAPI Backend**
+* **React + Vite Frontend**
+* **Integrated AI Chatbot**
+* **Market Simulator with Candlesticks (OHLCV)**
+
+> ⚠️ **Notice:** All data in this project is fictional. For commercial use, contact: **[Euoromario@gmail.com](mailto:Euoromario@gmail.com)**
+
+---
+
+## 📌 Index
+
+* Project Overview
+* Requirements
+* First‑time Installation
+* Daily Usage
+* Maintenance Scripts
+* Useful Flags
+* Project Structure
+* Troubleshooting
+* Contact / License
+
+---
+
+# 📦 1) Project Overview
+
+### 🔧 Backend — FastAPI
+
+* JWT Authentication
+* Accounts, transactions, cards, investments
+* Real‑time prices via WebSocket
+* Candlestick chart generation (OHLCV)
+* SQLite database
+
+### 💻 Frontend — React + Vite
+
+* Full dashboard
+* 3D cards
+* Professional investments module
+* Integrated chatbot
+* Modern UI with Tailwind + animations
+
+### 🤖 Chatbot
+
+* Dedicated knowledge‑base database
+* Semantic search
+
+### 🛠️ Scripts
+
+* Populate users, assets, funds, candles
+* Populate chatbot database
+* Reset, cleanup, and maintenance
+
+---
+
+# ⚙️ 2) Requirements
+
+* **Windows + PowerShell**
+* **Python 3.8+** in PATH
+* **Node.js 16+**
+* Recommended: close servers before running scripts that modify the database
+
+---
+
+# 🚀 3) First‑time Installation
+
+This step prepares EVERYTHING: venv, dependencies, databases, chatbot.
+
+Run in PowerShell from the project root:
+
+```powershell
+cd C:\Users\limar\Desktop\banco\Digital-Superbank-api-desafio-final-dio
+./start.ps1 -InitSetup
+```
+
+### This command automatically:
+
+* Creates `.venv` (if missing)
+* Installs backend dependencies
+* Installs frontend dependencies (`npm install`)
+* Populates main database and Chatbot database
+* Generates data files: `pessoa.txt`, `acao.txt`, `fundo_investimento.txt`, `chatbot.txt`
+
+### Optional additions:
+
+Generate historical candles:
+
+```powershell
+./start.ps1 -InitSetup -RunCandles -CandlesDays 7
+```
+
+Skip chatbot population:
+
+```powershell
+./start.ps1 -InitSetup -ExcludeChatbot
+```
+
+---
+
+# 🖥️ 4) Daily Usage
+
+After initial setup, use:
+
+```powershell
+./1.ps1
+```
+
+This script:
+
+* Activates or creates venv
+* Installs missing dependencies
+* Starts Backend (port 8000)
+* Starts Frontend (port 3000)
+
+> Tip: `start.ps1` without flags also works as a quick starter.
+
+---
+
+# 🔧 5) Maintenance Scripts
+
+Located in: `Backend/scripts`
+
+### 📌 Main Database
+
+Initialize tables:
+
+```powershell
+python Backend/scripts/init_db.py
+```
+
+Generate stocks:
+
+```powershell
+python Backend/scripts/generate_stocks.py
+```
+
+Generate funds:
+
+```powershell
+python Backend/scripts/generate_funds.py
+```
+
+Add fixed income assets:
+
+```powershell
+python Backend/scripts/add_fixed_income_assets.py
+```
+
+Demo users:
+
+```powershell
+python Backend/scripts/generate_demo_users.py
+```
+
+Varied users:
+
+```powershell
+python Backend/scripts/generate_varied_users.py
+```
+
+### 📌 Chatbot Database
+
+Initialize tables:
+
+```powershell
+python Backend/scripts/update_chatbot_db.py
+```
+
+Full population:
+
+```powershell
+python Backend/scripts/populate_chatbot_full.py
+```
+
+Interactive mode:
+
+```powershell
+python Backend/scripts/populate_chatbot.py
+```
+
+### 📌 Candlesticks
+
+```powershell
+python Backend/scripts/generate_historical_candles.py --days 7
+```
+
+---
+
+# 🏷️ 6) Main Flags
+
+### `start.ps1`
+
+* `-InitSetup` → full installation and database population
+* `-RunCandles` → generate candlesticks
+* `-CandlesDays N` → number of days
+* `-ExcludeChatbot` → skip chatbot setup
+* `-IncludeInteractiveChatbot` → interactive chatbot mode
+
+### `populate_all.ps1`
+
+* `-InstallDeps` → install dependencies
+* `-RunCandles`
+* `-Days N`
+* `-ExcludeChatbot`
+* `-IncludeInteractiveChatbot`
+* `-ContinueOnError`
+
+---
+
+# 📂 7) Project Structure
+
+```
+Digital Superbank/
+├── Backend/
+│   ├── main.py
+│   ├── src/
+│   │   ├── api/
+│   │   ├── models/
+│   │   ├── services/
+│   │   ├── database/
+│   │   └── configs/
+│   └── scripts/
+│
+├── Frontend/
+│   ├── src/components/
+│   ├── src/pages/
+│   ├── src/services/
+│   ├── vite.config.js
+│
+└── start.ps1
+```
+
+---
+
+# 🐛 8) Troubleshooting
+
+### ❗ `database is locked`
+
+Close uvicorn before running scripts.
+
+### ❗ `no such table: knowledge_base`
+
+Run:
+
+```powershell
+python Backend/scripts/update_chatbot_db.py
+```
+
+### ❗ Frontend errors
+
+* Delete `node_modules`
+* Run `npm install`
+* Ensure port 3000 is free
+
+### ❗ Backend errors
+
+* Activate venv: `./.venv/Scripts/Activate.ps1`
+* Reinstall: `pip install -r requirements.txt`
+
+---
+
+# 📬 9) Contact / License
+
+Educational project. For commercial use:
+**[Euoromario@gmail.com](mailto:Euoromario@gmail.com)**
+
+---
