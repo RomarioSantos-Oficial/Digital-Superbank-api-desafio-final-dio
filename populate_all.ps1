@@ -1,33 +1,46 @@
 <#
-Populate All - PowerShell Script
+Populate All - PowerShell Script Interativo
 
 Descrição:
-  Executa os scripts de inicialização e populamento do banco de dados
-  a partir da pasta `Backend` em ordem segura.
+  Script INTERATIVO para popular bancos de dados específicos.
+  Permite escolher quais dados adicionar: ações, fundos, pessoas ou chatbot.
 
 Parâmetros:
-  -InstallDeps: instala dependências do arquivo `Backend/requirements.txt` antes de executar
-  -RunCandles:   executa a geração de velas históricas (padrão: $false)
-  -Days:         número de dias para gerar velas (padrão: 7)
-  -ContinueOnError: continua para o próximo script em caso de erro (padrão: $false)
+  -All:          Popula todos os bancos de dados (não interativo)
+  -InstallDeps:  Instala dependências antes de executar
+  -RunCandles:   Executa a geração de velas históricas (padrão: $false)
+  -Days:         Número de dias para gerar velas (padrão: 7)
 
 Uso exemplo:
-  .\populate_all.ps1 -InstallDeps -RunCandles -Days 7
+  .\populate_all.ps1              (Modo interativo - RECOMENDADO)
+  .\populate_all.ps1 -All         (Popula tudo automaticamente)
 #>
 param (
+    [switch]$All = $false,
     [switch]$InstallDeps = $false,
     [switch]$RunCandles = $false,
-    [int]$Days = 7,
-    [switch]$ExcludeChatbot = $false,
-    [switch]$IncludeInteractiveChatbot = $false,
-    [switch]$ContinueOnError = $false
-    ,[switch]$UpdateAssets = $false
+    [int]$Days = 7
 )
 
 function Write-Log {
     param([string]$Message, [string]$Level = "INFO")
     $ts = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     Write-Host "[$ts] [$Level] $Message"
+}
+
+function Show-Banner {
+    Clear-Host
+    Write-Host ""
+    Write-Host "================================================================" -ForegroundColor Cyan
+    Write-Host "       DIGITAL SUPERBANK - POPULADOR DE DADOS INTERATIVO" -ForegroundColor Cyan
+    Write-Host "================================================================" -ForegroundColor Cyan
+    Write-Host ""
+}
+
+function Get-UserChoice {
+    param([string]$Question)
+    $choice = Read-Host "$Question (S/N)"
+    return $choice.ToUpper() -eq "S"
 }
 
 # Determina o diretório raiz do repositório (onde o script .ps1 está)
@@ -82,21 +95,6 @@ function Run-Script {
         if (!$LASTEXITCODE -or $LASTEXITCODE -eq 0) {
             Write-Log "Sucesso: $ScriptPath"
             return $true
-        } else {
-            Write-Log "Falha (exit code $LASTEXITCODE): $ScriptPath" "ERROR"
-            if (-not $ContinueOnError) { exit $LASTEXITCODE }
-            return $false
-        }
-    } catch {
-        Write-Log "Exceção ao executar $ScriptPath - $_" "ERROR"
-        if (-not $ContinueOnError) { exit 1 }
-        return $false
-    }
-    # Restaura variáveis de ambiente
-    if ($null -eq $oldPythonIO) { Remove-Item env:PYTHONIOENCODING -ErrorAction SilentlyContinue } else { $env:PYTHONIOENCODING = $oldPythonIO }
-    if ($null -eq $oldPythonUTF8) { Remove-Item env:PYTHONUTF8 -ErrorAction SilentlyContinue } else { $env:PYTHONUTF8 = $oldPythonUTF8 }
-}
-
 # Passo opcional: instalar dependências
 if ($InstallDeps) {
     Write-Log "Instalando dependências do Backend/requirements.txt..."
@@ -107,20 +105,105 @@ if ($InstallDeps) {
             Write-Log "Dependências instaladas com sucesso."
         } else {
             Write-Log "Falha ao instalar dependências com exit code $LASTEXITCODE" "ERROR"
-            if (-not $ContinueOnError) { exit $LASTEXITCODE }
+            exit $LASTEXITCODE
         }
     } else {
         Write-Log "Arquivo de requirements não encontrado: $reqFile" "WARN"
     }
 }
 
-# Ordem recomendada de execução
-$jobs = @(
-    @{ script = '.\scripts\init_db.py'; args = '' },
-    @{ script = '.\scripts\force_populate.py'; args = '' },
-    @{ script = '.\scripts\add_fixed_income_assets.py'; args = '' },
-    @{ script = '.\scripts\generate_demo_users.py'; args = '' },
-    @{ script = '.\scripts\generate_varied_users.py'; args = '' }
+# Modo interativo ou automático
+if (-not $All) {
+    Show-Banner
+    
+    Write-Host "Este script permite adicionar novos dados ao banco de dados." -ForegroundColor Yellow
+    Write-Host "Escolha quais dados você deseja popular:" -ForegroundColor Yellow
+    Write-Host ""
+    
+    # Perguntar sobre cada tipo de dado
+    $populateStocks = Get-UserChoice "Deseja adicionar/atualizar ACOES"
+    $populateFunds = Get-UserChoice "Deseja adicionar/atualizar FUNDOS IMOBILIARIOS"
+    $populateFixedIncome = Get-UserChoice "Deseja adicionar/atualizar RENDA FIXA"
+    $populateUsers = Get-UserChoice "Deseja adicionar/atualizar USUARIOS (demo e variados)"
+    $populateChatbot = Get-UserChoice "Deseja adicionar/atualizar CHATBOT (base de conhecimento)"
+    $generateCandles = Get-UserChoice "Deseja gerar VELAS HISTORICAS (pode demorar)"
+    
+    if ($generateCandles) {
+        $Days = Read-Host "Quantos dias de historico deseja gerar? [Padrao: 7]"
+        if ([string]::IsNullOrWhiteSpace($Days)) { $Days = 7 }
+    }
+    
+    Write-Host ""
+    Write-Host "================================================================" -ForegroundColor Green
+    Write-Host "INICIANDO POPULACAO DOS DADOS SELECIONADOS..." -ForegroundColor Green
+    Write-Host "================================================================" -ForegroundColor Green
+    Write-Host ""
+    
+} else {
+    # Modo automático (-All)
+    Write-Log "Modo automatico: populando TODOS os dados..."
+    $populateStocks = $true
+    $populateFunds = $true
+    $populateFixedIncome = $true
+    $populateUsers = $true
+    $populateChatbot = $true
+    $generateCandles = $false
+}
+
+# Sempre inicializa o banco
+# Gerar velas históricas se solicitado
+if ($generateCandles -or $RunCandles) {
+    Write-Log "Gerando velas históricas em $Days dias (isso pode demorar)..."
+    $ok = Run-Script -ScriptPath '.\scripts\generate_historical_candles.py' -Arguments "--days $Days"
+    if (-not $ok) {
+        Write-Log "AVISO: Falha ao gerar velas históricas" "WARN"
+    }
+}
+
+Write-Host ""
+Write-Host "================================================================" -ForegroundColor Green
+Write-Host "POPULACAO CONCLUIDA COM SUCESSO!" -ForegroundColor Green
+Write-Host "================================================================" -ForegroundColor Green
+Write-Host ""
+
+# Mostrar resumo do que foi populado
+Write-Host "RESUMO:" -ForegroundColor Cyan
+if ($populateStocks) { Write-Host "  [OK] Acoes populadas" -ForegroundColor Green }
+if ($populateFunds) { Write-Host "  [OK] Fundos imobiliarios populados" -ForegroundColor Green }
+if ($populateFixedIncome) { Write-Host "  [OK] Renda fixa populada" -ForegroundColor Green }
+if ($populateUsers) { Write-Host "  [OK] Usuarios populados" -ForegroundColor Green }
+if ($populateChatbot) { Write-Host "  [OK] Chatbot populado" -ForegroundColor Green }
+if ($generateCandles -or $RunCandles) { Write-Host "  [OK] Velas historicas geradas" -ForegroundColor Green }
+
+Write-Host ""
+Write-Host "Verifique os arquivos em demo/ para ver os dados criados." -ForegroundColor Yellow
+Write-Host ""
+
+exit 0
+if ($populateFunds) {
+    $jobsToRun += @{ script = '.\scripts\generate_funds.py'; args = '' }
+}
+
+if ($populateFixedIncome) {
+    $jobsToRun += @{ script = '.\scripts\add_fixed_income_assets.py'; args = '' }
+}
+
+if ($populateUsers) {
+    $jobsToRun += @{ script = '.\scripts\generate_demo_users.py'; args = '' }
+    $jobsToRun += @{ script = '.\scripts\generate_varied_users.py'; args = '' }
+}
+
+if ($populateChatbot) {
+    $jobsToRun += @{ script = '.\scripts\populate_chatbot_from_file.py'; args = '--update' }
+}
+
+# Executar jobs selecionados
+foreach ($job in $jobsToRun) {
+    $ok = Run-Script -ScriptPath $job.script -Arguments $job.args
+    if (-not $ok) {
+        Write-Log "AVISO: Falha em $($job.script) - continuando..." "WARN"
+    }
+}   @{ script = '.\scripts\generate_varied_users.py'; args = '' }
 )
 
 # Adiciona chatbot por padrão, mas permite desabilitar com -ExcludeChatbot

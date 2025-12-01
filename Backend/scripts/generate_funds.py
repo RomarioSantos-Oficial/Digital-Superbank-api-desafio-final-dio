@@ -69,7 +69,7 @@ def generate_funds():
     fundos_criados = []
     
     print("=" * 70)
-    print("🏢 CRIANDO FUNDOS IMOBILIÁRIOS")
+    print("CRIANDO FUNDOS IMOBILIARIOS")
     print("=" * 70 + "\n")
     
     try:
@@ -77,7 +77,7 @@ def generate_funds():
             # Verifica se já existe
             existing = db.query(Asset).filter(Asset.symbol == symbol).first()
             if existing:
-                print(f"⚠️  Fundo {i}/{len(fundos)}: {symbol} já existe - pulando")
+                print(f"[SKIP] Fundo {i}/{len(fundos)}: {symbol} ja existe - pulando")
                 continue
             
             # Calcula variação 24h aleatória (fundos são mais estáveis)
@@ -108,8 +108,8 @@ def generate_funds():
                 'change': price_change
             })
             
-            print(f"✅ Fundo {i}/{len(fundos)}: {symbol} - {name}")
-            print(f"   Descrição: {desc}")
+            print(f"[OK] Fundo {i}/{len(fundos)}: {symbol} - {name}")
+            print(f"   Descricao: {desc}")
             print(f"   Preço: R$ {price:.2f}")
             print(f"   Volatilidade: {volatility * 100:.1f}%")
             print(f"   Variação 24h: {price_change:+.2f}%\n")
@@ -129,7 +129,7 @@ def generate_funds():
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             backup_path = arquivo_path.replace('.txt', f'_backup_{timestamp}.txt')
             shutil.copy2(arquivo_path, backup_path)
-            print(f"📦 Backup criado: {backup_path}")
+            print(f"[BACKUP] Backup criado: {backup_path}")
         
         with open(arquivo_path, 'w', encoding='utf-8') as f:
             f.write("═" * 80 + "\n")
@@ -233,14 +233,14 @@ def generate_funds():
             f.write("✅ TODOS OS FUNDOS FORAM CRIADOS COM SUCESSO!\n")
             f.write("═" * 80 + "\n")
         
-        print("═" * 70)
-        print(f"✅ {len(fundos_criados)} FUNDOS IMOBILIÁRIOS CRIADOS COM SUCESSO!")
-        print(f"✅ Dados salvos em: fundo_investimento.txt")
-        print("═" * 70)
+        print("=" * 70)
+        print(f"[OK] {len(fundos_criados)} FUNDOS IMOBILIARIOS CRIADOS COM SUCESSO!")
+        print(f"[OK] Dados salvos em: fundo_investimento.txt")
+        print("=" * 70)
         
     except Exception as e:
         db.rollback()
-        print(f"\n❌ Erro: {str(e)}")
+        print(f"\n[ERROR] Erro: {str(e)}")
         raise
     finally:
         db.close()
@@ -257,27 +257,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     
-    # Verifica se arquivo já existe
-    arquivo_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'demo',
-        'fundo_investimento.txt'
-    )
-    
-    if os.path.exists(arquivo_path) and not args.update:
-        print("="*70)
-        print("⚠️  ARQUIVO JÁ EXISTE: fundo_investimento.txt")
-        print("="*70)
-        print()
-        print("Para evitar perda de dados, o arquivo NÃO será sobrescrito.")
-        print()
-        print("Opções:")
-        print("  1. Execute com --update para sobrescrever (backup será criado)")
-        print("  2. Renomeie o arquivo atual manualmente")
-        print("  3. Delete o arquivo atual se não precisar dele")
-        print()
-        print("Comando: python generate_funds.py --update")
-        print("="*70)
-        sys.exit(0)
-    
+    # Executa a geração (sempre cria dados no banco se não existirem)
     generate_funds()

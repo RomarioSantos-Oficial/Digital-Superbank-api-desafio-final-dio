@@ -66,7 +66,7 @@ def generate_stocks():
     acoes_criadas = []
     
     print("=" * 70)
-    print("📈 CRIANDO 30 AÇÕES PARA INVESTIMENTO")
+    print("CRIANDO 30 ACOES PARA INVESTIMENTO")
     print("=" * 70 + "\n")
     
     try:
@@ -74,7 +74,7 @@ def generate_stocks():
             # Verifica se já existe
             existing = db.query(Asset).filter(Asset.symbol == symbol).first()
             if existing:
-                print(f"⚠️  Ação {i}/30: {symbol} já existe - pulando")
+                print(f"[SKIP] Acao {i}/30: {symbol} ja existe - pulando")
                 continue
             
             # Calcula variação 24h aleatória
@@ -102,7 +102,7 @@ def generate_stocks():
                 'change': price_change
             })
             
-            print(f"✅ Ação {i}/30: {symbol} - {name}")
+            print(f"[OK] Acao {i}/30: {symbol} - {name}")
             print(f"   Categoria: {category.value}")
             print(f"   Preço: R$ {price:.2f}")
             print(f"   Volatilidade: {volatility * 100:.1f}%")
@@ -123,7 +123,7 @@ def generate_stocks():
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             backup_path = arquivo_path.replace('.txt', f'_backup_{timestamp}.txt')
             shutil.copy2(arquivo_path, backup_path)
-            print(f"📦 Backup criado: {backup_path}")
+            print(f"[BACKUP] Backup criado: {backup_path}")
         
         with open(arquivo_path, 'w', encoding='utf-8') as f:
             f.write("═" * 80 + "\n")
@@ -177,14 +177,14 @@ def generate_stocks():
             f.write("✅ TODAS AS AÇÕES FORAM CRIADAS COM SUCESSO!\n")
             f.write("═" * 80 + "\n")
         
-        print("═" * 70)
-        print(f"✅ {len(acoes_criadas)} AÇÕES CRIADAS COM SUCESSO!")
-        print(f"✅ Dados salvos em: acao.txt")
-        print("═" * 70)
+        print("=" * 70)
+        print(f"[OK] {len(acoes_criadas)} ACOES CRIADAS COM SUCESSO!")
+        print(f"[OK] Dados salvos em: acao.txt")
+        print("=" * 70)
         
     except Exception as e:
         db.rollback()
-        print(f"\n❌ Erro: {str(e)}")
+        print(f"\n[ERROR] Erro: {str(e)}")
         raise
     finally:
         db.close()
@@ -201,27 +201,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
     
-    # Verifica se arquivo já existe
-    arquivo_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'demo',
-        'acao.txt'
-    )
-    
-    if os.path.exists(arquivo_path) and not args.update:
-        print("="*70)
-        print("⚠️  ARQUIVO JÁ EXISTE: acao.txt")
-        print("="*70)
-        print()
-        print("Para evitar perda de dados, o arquivo NÃO será sobrescrito.")
-        print()
-        print("Opções:")
-        print("  1. Execute com --update para sobrescrever (backup será criado)")
-        print("  2. Renomeie o arquivo atual manualmente")
-        print("  3. Delete o arquivo atual se não precisar dele")
-        print()
-        print("Comando: python generate_stocks.py --update")
-        print("="*70)
-        sys.exit(0)
-    
+    # Executa a geração (sempre cria dados no banco se não existirem)
     generate_stocks()
