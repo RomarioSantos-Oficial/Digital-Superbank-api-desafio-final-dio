@@ -1,0 +1,72 @@
+# BASE DE CONHECIMENTO DO CHATBOT - DIGITAL SUPERBANK
+# Formato: CATEGORIA | PERGUNTA | RESPOSTA | PALAVRAS-CHAVE | INTENT | VARIACOES
+
+# ===== CATEGORIA: CONTAS =====
+contas|Como abrir uma conta?|Para abrir uma conta no Digital Superbank:\n1. Faça seu cadastro em /api/v1/auth/register\n2. Faça login em /api/v1/auth/login\n3. Crie sua conta em /api/v1/accounts/\n\nTemos 7 tipos de contas: Corrente, Poupança, Salário, Universitária, Empresarial, Investimento e Black.|abrir, criar, nova, conta, cadastro|abrir_conta|Quero abrir uma conta;Como faço para criar conta;Preciso de uma conta nova
+
+contas|Quais tipos de contas existem?|Oferecemos 7 tipos de contas:\n\n1. **Corrente** - Conta básica para todos\n2. **Poupança** - Com rendimento automático\n3. **Salário** - Para recebimento de salário\n4. **Universitária** - Para estudantes (18-25 anos)\n5. **Empresarial** - Para empresas\n6. **Investimento** - Para investir (requer Black ou Empresarial)\n7. **Black** - Premium (mínimo R$ 50.000)|tipos, contas, quais, categorias|tipos_conta|Que contas vocês têm;Tipos de conta disponíveis;Quais contas posso abrir
+
+contas|Como consultar meu saldo?|Para consultar seu saldo:\n\nFaça uma requisição GET para:\n/api/v1/accounts/{id}/balance\n\nVocê precisará estar autenticado e fornecer o ID da sua conta. Você pode listar suas contas em /api/v1/accounts/|saldo, consultar, ver, quanto tenho|consultar_saldo|Quanto tenho de saldo;Ver meu saldo;Checar saldo da conta
+
+contas|O que é Conta Black?|A Conta Black é nossa conta premium que exige saldo mínimo de R$ 50.000,00.\n\nVantagens:\n• Atendimento prioritário\n• Taxas diferenciadas\n• Limite maior para transações\n• Acesso a investimentos exclusivos\n\nPara validar se sua conta atende aos requisitos, use: GET /api/v1/accounts/{id}/validate-black|black, premium, vip, especial|info_conta_black|Conta Black o que é;Benefícios conta Black;Como ter conta Black
+
+# ===== CATEGORIA: TRANSACOES =====
+transacoes|Como fazer um depósito?|Para fazer um depósito:\n\nPOST /api/v1/transactions/deposit\n\nEnvie:\n{\n  "account_id": 123,\n  "amount": 1000.00,\n  "description": "Depósito inicial"\n}\n\nO valor será creditado imediatamente na sua conta!|depositar, deposito, adicionar dinheiro|fazer_deposito|Quero depositar;Como adiciono dinheiro;Fazer um depósito
+
+transacoes|Como fazer um saque?|Para fazer um saque:\n\nPOST /api/v1/transactions/withdraw\n\nLimites:\n• R$ 2.000 por operação\n• 3 saques por dia\n• R$ 5.000 total por dia\n\nEnvie:\n{\n  "account_id": 123,\n  "amount": 500.00,\n  "description": "Saque"\n}|sacar, saque, retirar|fazer_saque|Quero sacar dinheiro;Como retiro dinheiro;Fazer saque
+
+transacoes|Qual o limite de saque?|Limites de saque:\n\n• **Por operação:** R$ 2.000,00\n• **Saques por dia:** Máximo 3\n• **Total diário:** R$ 5.000,00\n\nEstes limites são para sua segurança!|limite, saque, quanto posso, maximo|limite_saque|Quanto posso sacar;Limite de saque diário;Máximo de saque
+
+transacoes|Como fazer uma transferência?|Para fazer transferência entre contas:\n\nPOST /api/v1/transactions/transfer\n\nEnvie:\n{\n  "from_account_id": 123,\n  "to_account_number": "12345-6",\n  "amount": 100.00,\n  "description": "Transferência"\n}\n\nA transferência é instantânea!|transferir, transferencia, enviar|fazer_transferencia|Quero transferir;Como envio dinheiro;Fazer transferência
+
+transacoes|Como fazer PIX?|Para enviar PIX:\n\nPOST /api/v1/transactions/pix/send\n\nEnvie:\n{\n  "from_account_id": 123,\n  "pix_key": "11999999999",\n  "amount": 50.00,\n  "description": "PIX"\n}\n\nO PIX é instantâneo e funciona 24/7!|pix, enviar pix, transferencia pix|fazer_pix|Quero fazer um PIX;Como envio PIX;Transferir via PIX
+
+transacoes|Como pagar um boleto?|Para pagar boleto:\n\nPOST /api/v1/transactions/pay-bill\n\nEnvie:\n{\n  "account_id": 123,\n  "bar_code": "23791234500000100009876543210",\n  "amount": 150.00,\n  "description": "Conta de luz"\n}\n\nO pagamento é processado na hora!|boleto, pagar boleto, conta|pagar_boleto|Quero pagar um boleto;Como pago boleto;Pagar conta
+
+transacoes|Como ver meu extrato?|Para ver seu extrato:\n\nGET /api/v1/transactions/statement?account_id=123\n\nVocê pode filtrar por:\n• Data inicial e final\n• Tipo de transação\n• Ordenação\n\nO extrato mostra todas suas movimentações!|extrato, historico, movimentacoes|ver_extrato|Quero ver o extrato;Mostrar histórico;Minhas movimentações
+
+# ===== CATEGORIA: CARTOES =====
+cartoes|Como solicitar um cartão de crédito?|Para solicitar cartão de crédito:\n\nPOST /api/v1/credit-cards/\n\nEnvie:\n{\n  "account_id": 123,\n  "requested_limit": 5000.00\n}\n\nFazemos análise automática de crédito baseada no seu score!\n\nCategorias disponíveis:\n• **Basic** - Até R$ 5.000\n• **Platinum** - Até R$ 15.000\n• **Black** - Até R$ 50.000|cartao, credito, solicitar|solicitar_cartao|Quero um cartão;Como peço cartão de crédito;Solicitar cartão
+
+cartoes|Quais bandeiras de cartão vocês aceitam?|Trabalhamos com 4 bandeiras:\n\n• **Visa**\n• **Mastercard**\n• **Elo**\n• **American Express**\n\nA bandeira é atribuída automaticamente na criação do cartão!|bandeira, visa, mastercard, elo|bandeiras_cartao|Que bandeiras tem;Quais cartões vocês têm;Bandeiras disponíveis
+
+cartoes|Como fazer uma compra no cartão?|Para fazer compra no cartão:\n\nPOST /api/v1/credit-cards/{card_id}/purchase\n\nEnvie:\n{\n  "amount": 400.00,\n  "merchant": "Loja XYZ",\n  "installments": 3,\n  "description": "Notebook"\n}\n\nVocê pode parcelar em até 24x!|comprar, compra, cartao, parcelar|comprar_cartao|Quero comprar no cartão;Como uso o cartão;Fazer compra parcelada
+
+cartoes|Como pagar a fatura do cartão?|Para pagar fatura do cartão:\n\nPOST /api/v1/credit-cards/{card_id}/pay-bill\n\nEnvie:\n{\n  "account_id": 123,\n  "amount": 500.00\n}\n\nPode pagar parcial ou total. O valor é debitado da sua conta na hora!|fatura, pagar fatura, cartao|pagar_fatura|Quero pagar a fatura;Como pago o cartão;Pagar fatura do crédito
+
+# ===== CATEGORIA: INVESTIMENTOS =====
+investimentos|Quais investimentos estão disponíveis?|Temos investimentos variados!\n\n**Ações** - Empresas de diversos setores:\n• Tecnologia\n• Energia\n• Finanças\n• Saúde\n• Varejo\n\n**Fundos Imobiliários** - Diversos tipos:\n• Lajes Corporativas\n• Shopping Centers\n• Logísticos\n• Hotéis\n• Educação\n• Residenciais\n\nVeja todos em: GET /api/v1/investments/assets|investir, investimento, acoes, fundos|listar_investimentos|O que posso investir;Quais ações tem;Investimentos disponíveis
+
+investimentos|Como comprar uma ação?|Para comprar ações:\n\n1. Você precisa ter uma **Conta Investimento**\n2. Faça POST para /api/v1/investments/buy\n\nEnvie:\n{\n  "account_id": 123,\n  "asset_id": 1,\n  "quantity": 10\n}\n\nO valor é calculado automaticamente pelo preço atual!|comprar, acao, investir|comprar_acao|Quero comprar ações;Como invisto;Comprar investimento
+
+investimentos|Como vender uma ação?|Para vender ações:\n\nPOST /api/v1/investments/sell\n\nEnvie:\n{\n  "account_id": 123,\n  "asset_id": 1,\n  "quantity": 5\n}\n\nO lucro/prejuízo é calculado automaticamente e creditado na sua conta!|vender, acao, lucro|vender_acao|Quero vender ações;Como faço venda;Vender investimento
+
+investimentos|Como ver meu portfólio?|Para ver seu portfólio:\n\nGET /api/v1/investments/portfolio?account_id=123\n\nOu para resumo consolidado:\nGET /api/v1/investments/portfolio/summary?account_id=123\n\nVocê verá:\n• Ativos que possui\n• Quantidade de cada\n• Preço médio de compra\n• Valor atual\n• Lucro/Prejuízo|portfolio, carteira, investimentos|ver_portfolio|Ver meus investimentos;Mostrar carteira;Meu portfólio
+
+investimentos|Os preços são atualizados em tempo real?|Sim! Temos um **simulador de mercado em tempo real**!\n\n• Preços atualizam a cada 10 segundos\n• Volatilidade realista (Ações ±2%, Fundos ±0.5%)\n• Você pode acompanhar via **WebSocket**\n\nConecte-se:\nws://localhost:8000/ws/market-feed\n\nReceba atualizações instantâneas de preços!|tempo real, preco, atualizar, websocket|preco_tempo_real|Preços atualizam;Tempo real;Cotação ao vivo
+
+# ===== CATEGORIA: SEGURANCA =====
+seguranca|Como faço login?|Você pode fazer login de 3 formas:\n\nPOST /api/v1/auth/login\n\n1. **Por Email:**\n   {"identifier": "email@example.com", "password": "senha"}\n\n2. **Por CPF:**\n   {"identifier": "123.456.789-10", "password": "senha"}\n\n3. **Por Número da Conta:**\n   {"identifier": "12345-6", "password": "senha"}\n\nVocê receberá um token JWT para usar nas próximas requisições!|login, entrar, senha|fazer_login|Como entro;Fazer login;Acessar conta
+
+seguranca|Meus dados estão seguros?|Sim! Temos várias camadas de segurança:\n\n• **Senhas** são criptografadas com bcrypt\n• **Tokens JWT** com expiração de 30 minutos\n• **Validação** em todas as operações\n• **Proteção de rotas** - só você acessa suas informações\n• **Transações atômicas** - rollback automático em falhas\n• **HTTPS** recomendado para produção\n\nSeus dados estão protegidos!|seguranca, seguro, protecao|info_seguranca|É seguro;Proteção de dados;Segurança do banco
+
+# ===== CATEGORIA: PIX =====
+pix|Como cadastrar chave PIX?|Para cadastrar uma chave PIX:\n\nPOST /api/v1/pix/keys/\n\nEnvie:\n{\n  "account_id": 123,\n  "key_type": "CPF",\n  "key_value": "123.456.789-10"\n}\n\nTipos aceitos:\n• CPF\n• EMAIL\n• PHONE\n• EVP (chave aleatória)|pix, chave, cadastrar, registrar|cadastrar_pix|Como cadastro PIX;Registrar chave PIX;Criar chave
+
+pix|Como listar minhas chaves PIX?|Para ver suas chaves PIX:\n\nGET /api/v1/pix/keys/?account_id=123\n\nVocê verá:\n• Tipo da chave\n• Valor da chave\n• Status (ativa/inativa)\n• Data de criação|pix, chaves, listar, minhas|listar_chaves_pix|Minhas chaves PIX;Ver chaves cadastradas;Quais chaves tenho
+
+pix|Como excluir chave PIX?|Para excluir uma chave PIX:\n\nDELETE /api/v1/pix/keys/{key_id}\n\nA chave será removida imediatamente e não poderá mais receber PIX.|pix, excluir, deletar, remover|excluir_pix|Deletar chave PIX;Remover PIX;Apagar chave
+
+# ===== CATEGORIA: SUPORTE =====
+suporte|Como entro em contato com o suporte?|Você pode:\n\n1. **Usar este chatbot** - Estou aqui para ajudar 24/7!\n2. **Email:** suporte@digitalbank.com\n3. **Telefone:** (11) 4000-0000\n4. **WhatsApp:** (11) 99999-9999\n\nEstamos sempre prontos para te ajudar!|suporte, ajuda, contato, telefone|contato_suporte|Falar com suporte;Preciso de ajuda;Contato do banco
+
+suporte|Onde vejo a documentação da API?|Temos documentação completa!\n\n• **Swagger UI:** http://localhost:8000/docs\n• **ReDoc:** http://localhost:8000/redoc\n\nLá você encontra:\n• Todos os endpoints\n• Exemplos de requisições\n• Schemas de dados\n• Como testar|documentacao, api, swagger, docs|ver_documentacao|Documentação da API;Onde está os docs;Ver API docs
+
+suporte|Qual o horário de atendimento?|**Digital Superbank funciona 24/7!**\n\n• API disponível 24 horas\n• PIX 24/7\n• Chatbot sempre ativo\n• Transações a qualquer hora\n\nAtendimento humano:\n• Segunda a Sexta: 8h às 20h\n• Sábado: 8h às 14h\n• Domingo e feriados: Chatbot|horario, atendimento, funcionamento|horario_atendimento|Que horas funciona;Horário do banco;Quando posso usar
+
+# ===== CATEGORIA: GERAL =====
+geral|O que é o Digital Superbank?|**Digital Superbank** é um sistema bancário digital completo!\n\nOferecemos:\n• 7 tipos de contas\n• Transações (PIX, boletos, transferências)\n• Cartões de crédito (3 categorias)\n• Investimentos (ações e fundos)\n• Simulador de mercado em tempo real\n• WebSocket para dados ao vivo\n• API REST completa\n• Chatbot inteligente (eu!)\n\nTudo 100% digital e seguro!|digital superbank, banco, o que e|info_banco|O que é isso;Sobre o banco;Quem é Digital Superbank
+
+geral|Obrigado!|Por nada!\n\nFico feliz em ajudar! Se precisar de mais alguma coisa, é só perguntar.\n\nLembre-se: estou aqui 24/7 para te ajudar com:\n• Contas\n• Transações\n• Cartões\n• Investimentos\n• E muito mais!\n\nTenha um ótimo dia!|obrigado, obrigada, valeu|agradecimento|Valeu;Muito obrigado;Brigadão
+
+geral|Oi|Olá! Seja bem-vindo ao Digital Superbank!\n\nEu sou o assistente virtual e estou aqui para ajudar você com:\n• Abertura de contas\n• Transações bancárias\n• Cartões de crédito\n• Investimentos\n• Dúvidas sobre o sistema\n\nComo posso te ajudar hoje?|oi, ola, bem-vindo|saudacao|Olá;Bom dia;Boa tarde;Boa noite;Hey
