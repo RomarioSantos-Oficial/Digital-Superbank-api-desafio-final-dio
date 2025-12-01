@@ -117,8 +117,7 @@ if ($InstallDeps) {
 # Ordem recomendada de execução
 $jobs = @(
     @{ script = '.\scripts\init_db.py'; args = '' },
-    @{ script = '.\scripts\generate_stocks.py'; args = '' },
-    @{ script = '.\scripts\generate_funds.py'; args = '' },
+    @{ script = '.\scripts\force_populate.py'; args = '' },
     @{ script = '.\scripts\add_fixed_income_assets.py'; args = '' },
     @{ script = '.\scripts\generate_demo_users.py'; args = '' },
     @{ script = '.\scripts\generate_varied_users.py'; args = '' }
@@ -131,9 +130,6 @@ if (-not $ExcludeChatbot) {
 
 # Roda em sequência
 foreach ($job in $jobs) {
-    if ($UpdateAssets -and ($job.script -like '*stocks*' -or $job.script -like '*funds*' -or $job.script -like '*fixed*')) {
-        $job.args = '--update'
-    }
     $ok = Run-Script -ScriptPath $job.script -Arguments $job.args
     if (-not $ok -and -not $ContinueOnError) {
         Write-Log "Abortando sequência devido a erro em $($job.script)" "ERROR"
