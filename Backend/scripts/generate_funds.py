@@ -204,16 +204,19 @@ def generate_funds():
             f.write("📊 ESTATÍSTICAS GERAIS\n")
             f.write("═" * 80 + "\n\n")
             
-            preco_medio = sum(f['price'] for f in fundos_criados) / len(fundos_criados)
-            vol_media = sum(f['volatility'] for f in fundos_criados) / len(fundos_criados)
-            preco_min = min(f['price'] for f in fundos_criados)
-            preco_max = max(f['price'] for f in fundos_criados)
-            
-            f.write(f"Total de Fundos: {len(fundos_criados)}\n")
-            f.write(f"Preço Médio: R$ {preco_medio:,.2f}\n")
-            f.write(f"Preço Mínimo: R$ {preco_min:,.2f}\n")
-            f.write(f"Preço Máximo: R$ {preco_max:,.2f}\n")
-            f.write(f"Volatilidade Média: {vol_media*100:.1f}%\n\n")
+            if fundos_criados:
+                preco_medio = sum(f['price'] for f in fundos_criados) / len(fundos_criados)
+                vol_media = sum(f['volatility'] for f in fundos_criados) / len(fundos_criados)
+                preco_min = min(f['price'] for f in fundos_criados)
+                preco_max = max(f['price'] for f in fundos_criados)
+                
+                f.write(f"Total de Fundos: {len(fundos_criados)}\n")
+                f.write(f"Preço Médio: R$ {preco_medio:,.2f}\n")
+                f.write(f"Preço Mínimo: R$ {preco_min:,.2f}\n")
+                f.write(f"Preço Máximo: R$ {preco_max:,.2f}\n")
+                f.write(f"Volatilidade Média: {vol_media*100:.1f}%\n\n")
+            else:
+                f.write("⚠️  Nenhum fundo novo criado (todos já existiam)\n\n")
             
             f.write("═" * 80 + "\n")
             f.write("📋 RESUMO POR TIPO\n")
