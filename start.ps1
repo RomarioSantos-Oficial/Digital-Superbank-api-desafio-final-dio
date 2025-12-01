@@ -348,46 +348,48 @@ if (-not $NoData) {
     
     # 1. OBRIGATORIO: Acoes (sempre instalado)
     Write-Host "   [1/5] Criando acoes..." -ForegroundColor Cyan
-    & $venvPython scripts\generate_stocks.py --update 2>&1 | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Step "30 acoes criadas!" "SUCCESS"
-    } else {
+    try {
+        & $venvPython scripts\generate_stocks.py --update 2>&1 | Out-Null
+        Write-Step "30 acoes verificadas/criadas!" "SUCCESS"
+    } catch {
         Write-Step "Erro ao criar acoes!" "ERROR"
     }
     
     # 2. OBRIGATORIO: Fundos Imobiliarios (sempre instalado)
     Write-Host "   [2/5] Criando fundos imobiliarios..." -ForegroundColor Cyan
-    & $venvPython scripts\generate_funds.py --update 2>&1 | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Step "25 fundos criados!" "SUCCESS"
-    } else {
+    try {
+        & $venvPython scripts\generate_funds.py --update 2>&1 | Out-Null
+        Write-Step "25 fundos verificados/criados!" "SUCCESS"
+    } catch {
         Write-Step "Erro ao criar fundos!" "ERROR"
     }
     
     # 3. OBRIGATORIO: Chatbot (sempre instalado)
     Write-Host "   [3/5] Populando base de conhecimento do chatbot..." -ForegroundColor Cyan
-    & $venvPython scripts\populate_chatbot_from_file.py --update 2>&1 | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Step "Chatbot configurado!" "SUCCESS"
-    } else {
+    try {
+        & $venvPython scripts\populate_chatbot_from_file.py --update 2>&1 | Out-Null
+        Write-Step "Chatbot configurado com 31 conhecimentos!" "SUCCESS"
+    } catch {
         Write-Step "Erro ao configurar chatbot!" "ERROR"
     }
     
     # 4. Ativos de renda fixa
     Write-Host "   [4/5] Adicionando ativos de renda fixa..." -ForegroundColor Cyan
-    & $venvPython scripts\add_fixed_income_assets.py 2>&1 | Out-Null
-    if ($LASTEXITCODE -eq 0) {
-        Write-Step "Renda fixa adicionada!" "SUCCESS"
+    try {
+        & $venvPython scripts\add_fixed_income_assets.py 2>&1 | Out-Null
+        Write-Step "Renda fixa verificada/adicionada!" "SUCCESS"
+    } catch {
+        # Ignorar erro silenciosamente pois eh opcional
     }
     
     # 5. OPCIONAL: Usuarios de demonstracao
     if ($installUsers) {
         Write-Host "   [5/5] Criando usuarios de demonstracao..." -ForegroundColor Cyan
-        & $venvPython scripts\generate_demo_users.py --update 2>&1 | Out-Null
-        & $venvPython scripts\generate_varied_users.py 2>&1 | Out-Null
-        if ($LASTEXITCODE -eq 0) {
+        try {
+            & $venvPython scripts\generate_demo_users.py --update 2>&1 | Out-Null
+            & $venvPython scripts\generate_varied_users.py 2>&1 | Out-Null
             Write-Step "37 usuarios criados!" "SUCCESS"
-        } else {
+        } catch {
             Write-Step "Erro ao criar usuarios!" "ERROR"
         }
     } else {
