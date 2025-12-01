@@ -116,6 +116,7 @@ def list_user_cards(
             id=card.id,
             account_id=card.account_id,
             card_number=card.card_number,
+            cvv=card.cvv,  # Adicionado CVV
             expiry_date=card.expiry_date,
             credit_limit=card.credit_limit,
             available_limit=card.available_limit,
@@ -123,7 +124,6 @@ def list_user_cards(
             card_category=card.card_category,
             card_brand=card.card_brand,
             status=card.status,
-
             is_virtual=card.is_virtual,
             created_at=card.created_at
         ) for card in all_cards
@@ -150,6 +150,7 @@ def get_card_details(
         id=card.id,
         account_id=card.account_id,
         card_number=card.card_number,
+        cvv=card.cvv,  # Adicionado CVV
         expiry_date=card.expiry_date,
         credit_limit=card.credit_limit,
         available_limit=card.available_limit,
@@ -222,6 +223,7 @@ def unblock_card(
             id=card.id,
             account_id=card.account_id,
             card_number=card.card_number,
+            cvv=card.cvv,
             expiry_date=card.expiry_date,
             credit_limit=card.credit_limit,
             available_limit=card.available_limit,
@@ -229,7 +231,6 @@ def unblock_card(
             card_category=card.card_category,
             card_brand=card.card_brand,
             status=card.status,
-
             is_virtual=card.is_virtual,
             created_at=card.created_at
         )

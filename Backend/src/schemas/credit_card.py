@@ -13,6 +13,7 @@ class CreditCardResponse(BaseModel):
     id: int
     account_id: int
     card_number: str
+    cvv: str  # Agora sempre retornado
     expiry_date: datetime
     credit_limit: float
     available_limit: float
@@ -20,7 +21,6 @@ class CreditCardResponse(BaseModel):
     card_category: str
     card_brand: str
     status: str
-
     is_virtual: bool
     created_at: datetime
     

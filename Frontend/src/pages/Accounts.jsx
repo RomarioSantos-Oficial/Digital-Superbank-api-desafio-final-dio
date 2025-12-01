@@ -88,7 +88,7 @@ const Accounts = () => {
 
                   <div className="pt-4 border-t border-gray-700">
                     <span className="text-sm text-gray-500">Saldo Disponível</span>
-                    <p className="text-2xl font-bold text-blue-400 mt-1">
+                    <p className="text-2xl font-bold text-yellow-500 mt-1">
                       {formatCurrency(account.balance)}
                     </p>
                   </div>

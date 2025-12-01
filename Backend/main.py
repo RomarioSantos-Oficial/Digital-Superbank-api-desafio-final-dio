@@ -19,6 +19,9 @@ from src.services import investment_service
 from src.services.candle_service import generate_candles_for_all_stocks
 import random
 
+# Importar TODOS os modelos para SQLAlchemy criar as tabelas
+import src.models  # noqa: F401 - necessário para Base.metadata
+
 
 class ConnectionManager:
     """Gerenciador de conexões WebSocket"""

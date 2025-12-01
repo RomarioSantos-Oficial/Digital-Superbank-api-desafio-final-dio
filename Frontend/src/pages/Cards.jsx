@@ -40,32 +40,32 @@ const Cards = () => {
   };
 
   const handleBlockCard = async (cardId) => {
-    await blockCard(cardId);
-    loadCards(user.id);
+    const result = await blockCard(cardId);
+    if (result.success) {
+      loadCards(user.id);
+    }
   };
 
   const handleUnblockCard = async (cardId) => {
-    await unblockCard(cardId);
-    loadCards(user.id);
+    const result = await unblockCard(cardId);
+    if (result.success) {
+      loadCards(user.id);
+    }
   };
 
   const getCardGradient = (cardType) => {
-    const gradients = {
-      basic: 'from-green-400 to-green-600',
-      plus: 'from-blue-500 to-blue-700',
-      premium: 'from-gray-800 to-black',
-      virtual: 'from-purple-500 to-purple-700',
-    };
-    return gradients[cardType] || gradients.basic;
+    // Todos os cartões usam gradiente amarelo
+    return 'from-yellow-500 to-yellow-600';
   };
 
   const getBrandIcon = (brand) => {
     const icons = {
       'Visa': <SiVisa className="w-12 h-12" />,
-      'Mastercard': <SiMastercard className="w-12 h-12" />,
+      'Mastercard': <img src="/aura-logo.png" alt="Aura" className="w-16 h-16 object-contain" />,
       'Elo': <FaCcDiscover className="w-12 h-12" />,
+      'Aura': <img src="/aura-logo.png" alt="Aura" className="w-16 h-16 object-contain" />,
     };
-    return icons[brand] || <IoCard className="w-12 h-12 opacity-50" />;
+    return icons[brand] || <img src="/aura-logo.png" alt="Aura" className="w-16 h-16 object-contain" />;
   };
 
   return (
@@ -89,9 +89,11 @@ const Cards = () => {
           </div>
         ) : cards.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {cards.map((card) => (
+            {cards.map((card) => {
+              console.log('Card data:', card); // Debug
+              return (
               <Card key={card.id} className="overflow-hidden">
-                <div className={`bg-gradient-to-br ${getCardGradient(card.card_type)} text-white p-6 rounded-xl mb-4`}>
+                <div className={`bg-gradient-to-br ${getCardGradient(card.card_type)} text-gray-900 p-6 rounded-xl mb-4`}>
                   <div className="flex items-center justify-between mb-8">
                     <div className="flex flex-col gap-2">
                       <span className="text-sm font-medium">Digital Superbank</span>
@@ -106,7 +108,7 @@ const Cards = () => {
 
                   <div className="mb-6">
                     <p className="text-xl tracking-wider font-mono">
-                      {formatCardNumber(card.card_number, true)}
+                      {card.card_number}
                     </p>
                   </div>
 
@@ -120,6 +122,10 @@ const Cards = () => {
                       <p className="font-medium">
                         {card.expiry_date ? new Date(card.expiry_date).toLocaleDateString('pt-BR', { month: '2-digit', year: '2-digit' }).replace(/\//g, '/') : '--/--'}
                       </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs opacity-70 mb-1">CVV</p>
+                      <p className="font-medium font-mono text-lg">{card.cvv || '***'}</p>
                     </div>
                   </div>
                 </div>
@@ -166,7 +172,8 @@ const Cards = () => {
                   </div>
                 </div>
               </Card>
-            ))}
+            );
+            })}
           </div>
         ) : (
           <Card>

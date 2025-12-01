@@ -1,103 +1,173 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IoNotifications, IoClose, IoCheckmark, IoTime, IoWallet } from 'react-icons/io5';
+import { IoNotifications, IoClose, IoCheckmark, IoTime, IoWallet, IoArrowDown, IoArrowUp } from 'react-icons/io5';
 import { formatCurrency, formatDate } from '../../utils/formatters';
+import api from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const NotificationBell = () => {
+  const { user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [lastCheckTime, setLastCheckTime] = useState(null);
 
   useEffect(() => {
-    loadNotifications();
-    // Atualizar notificações a cada 30 segundos
-    const interval = setInterval(loadNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    if (user) {
+      loadNotifications();
+      // Atualizar notificações a cada 15 segundos
+      const interval = setInterval(loadNotifications, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [user]);
 
   const loadNotifications = async () => {
     try {
       const token = localStorage.getItem('auth_token');
-      if (!token) return;
+      if (!token || !user) return;
 
-      // Carregar notificações persistidas do localStorage
-      const savedNotifications = localStorage.getItem('notifications');
-      
-      if (savedNotifications) {
-        // Se já existem notificações salvas, usar elas
-        const parsed = JSON.parse(savedNotifications);
-        // Converter timestamps de string para Date
-        const notificationsWithDates = parsed.map(n => ({
-          ...n,
-          timestamp: new Date(n.timestamp),
-          icon: n.type === 'transaction' ? IoWallet : 
-                n.type === 'investment' ? IoCheckmark : IoTime
-        }));
-        setNotifications(notificationsWithDates);
-        setUnreadCount(notificationsWithDates.filter(n => !n.read).length);
-      } else {
-        // Primeira vez: criar notificações iniciais
-        const mockNotifications = [
-          {
-            id: Date.now() + 1,
-            type: 'transaction',
-            title: 'Transferência recebida',
-            message: 'Você recebeu R$ 500,00',
-            timestamp: new Date(Date.now() - 1000 * 60 * 5),
-            read: false,
-            icon: IoWallet,
-            color: 'green'
-          },
-          {
-            id: Date.now() + 2,
-            type: 'investment',
-            title: 'Investimento concluído',
-            message: 'Sua compra de PETR4 foi processada',
-            timestamp: new Date(Date.now() - 1000 * 60 * 30),
-            read: false,
-            icon: IoCheckmark,
-            color: 'blue'
-          },
-          {
-            id: Date.now() + 3,
-            type: 'reminder',
-            title: 'Fatura próxima do vencimento',
-            message: 'Sua fatura vence em 3 dias',
-            timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
-            read: false,
-            icon: IoTime,
-            color: 'yellow'
+      // Buscar todas as contas do usuário
+      const accountsResponse = await api.get('/api/v1/accounts');
+      const userAccounts = accountsResponse.data;
+
+      // Buscar transações recentes de todas as contas (últimas 24 horas)
+      const oneDayAgo = new Date();
+      oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+
+      const allTransactions = [];
+      for (const account of userAccounts) {
+        try {
+          const response = await api.get('/api/v1/transactions/statement', {
+            params: { 
+              account_id: account.id,
+              limit: 50 
+            }
+          });
+          if (response.data && response.data.transactions) {
+            allTransactions.push(...response.data.transactions.map(t => ({
+              ...t,
+              accountNumber: account.account_number,
+              accountType: account.account_type
+            })));
           }
-        ];
-
-        // Salvar no localStorage
-        const toSave = mockNotifications.map(n => ({
-          ...n,
-          icon: undefined, // Não salvar função no localStorage
-          timestamp: n.timestamp.toISOString()
-        }));
-        localStorage.setItem('notifications', JSON.stringify(toSave));
-
-        setNotifications(mockNotifications);
-        setUnreadCount(mockNotifications.filter(n => !n.read).length);
+        } catch (err) {
+          console.error(`Erro ao buscar transações da conta ${account.id}:`, err);
+        }
       }
+
+      // Filtrar transações das últimas 24 horas
+      const recentTransactions = allTransactions.filter(t => {
+        const transactionDate = new Date(t.created_at);
+        return transactionDate >= oneDayAgo;
+      });
+
+      // Converter transações em notificações
+      const transactionNotifications = recentTransactions.map(transaction => {
+        const isCredit = transaction.transaction_type === 'DEPOSIT' || 
+                        transaction.transaction_type === 'TRANSFER' && transaction.to_account_id;
+        const isDebit = transaction.transaction_type === 'WITHDRAWAL' || 
+                       transaction.transaction_type === 'TRANSFER' && transaction.from_account_id ||
+                       transaction.transaction_type === 'PIX_SEND' ||
+                       transaction.transaction_type === 'BILL_PAYMENT';
+
+        let title = '';
+        let message = '';
+        let color = '';
+        let icon = IoWallet;
+
+        switch (transaction.transaction_type) {
+          case 'DEPOSIT':
+            title = 'Depósito recebido';
+            message = `${formatCurrency(transaction.amount)} na conta ${transaction.accountNumber}`;
+            color = 'green';
+            icon = IoArrowDown;
+            break;
+          case 'WITHDRAWAL':
+            title = 'Saque realizado';
+            message = `${formatCurrency(transaction.amount)} da conta ${transaction.accountNumber}`;
+            color = 'red';
+            icon = IoArrowUp;
+            break;
+          case 'TRANSFER':
+            if (isCredit) {
+              title = 'Transferência recebida';
+              message = `${formatCurrency(transaction.amount)} na conta ${transaction.accountNumber}`;
+              color = 'green';
+              icon = IoArrowDown;
+            } else {
+              title = 'Transferência enviada';
+              message = `${formatCurrency(transaction.amount)} da conta ${transaction.accountNumber}`;
+              color = 'blue';
+              icon = IoArrowUp;
+            }
+            break;
+          case 'PIX_SEND':
+            title = 'PIX enviado';
+            message = `${formatCurrency(transaction.amount)} da conta ${transaction.accountNumber}`;
+            color = 'purple';
+            icon = IoArrowUp;
+            break;
+          case 'PIX_RECEIVE':
+            title = 'PIX recebido';
+            message = `${formatCurrency(transaction.amount)} na conta ${transaction.accountNumber}`;
+            color = 'green';
+            icon = IoArrowDown;
+            break;
+          case 'BILL_PAYMENT':
+            title = 'Pagamento realizado';
+            message = `${formatCurrency(transaction.amount)} da conta ${transaction.accountNumber}`;
+            color = 'orange';
+            icon = IoCheckmark;
+            break;
+          default:
+            title = 'Transação';
+            message = `${formatCurrency(transaction.amount)}`;
+            color = 'gray';
+        }
+
+        if (transaction.description && transaction.description !== 'Transferência') {
+          message += ` - ${transaction.description}`;
+        }
+
+        return {
+          id: `transaction-${transaction.id}`,
+          type: 'transaction',
+          title,
+          message,
+          timestamp: new Date(transaction.created_at),
+          read: false,
+          icon,
+          color,
+          transactionId: transaction.id
+        };
+      });
+
+      // Carregar notificações já lidas do localStorage
+      const savedNotifications = localStorage.getItem(`notifications_${user.id}`);
+      const readNotificationIds = savedNotifications ? JSON.parse(savedNotifications) : [];
+
+      // Marcar como lidas as notificações já vistas
+      const notificationsWithReadStatus = transactionNotifications.map(n => ({
+        ...n,
+        read: readNotificationIds.includes(n.id)
+      }));
+
+      // Ordenar por data (mais recentes primeiro)
+      notificationsWithReadStatus.sort((a, b) => b.timestamp - a.timestamp);
+
+      setNotifications(notificationsWithReadStatus);
+      setUnreadCount(notificationsWithReadStatus.filter(n => !n.read).length);
+      
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
     }
   };
 
-  // Função para salvar notificações no localStorage
-  const saveNotifications = (notifs) => {
-    const toSave = notifs.map(n => ({
-      id: n.id,
-      type: n.type,
-      title: n.title,
-      message: n.message,
-      timestamp: n.timestamp.toISOString(),
-      read: n.read,
-      color: n.color
-    }));
-    localStorage.setItem('notifications', JSON.stringify(toSave));
+  // Função para salvar notificações lidas no localStorage
+  const saveReadNotifications = (notifs) => {
+    if (!user) return;
+    const readIds = notifs.filter(n => n.read).map(n => n.id);
+    localStorage.setItem(`notifications_${user.id}`, JSON.stringify(readIds));
   };
 
   const markAsRead = (id) => {
@@ -105,21 +175,20 @@ const NotificationBell = () => {
       notif.id === id ? { ...notif, read: true } : notif
     );
     setNotifications(updated);
-    saveNotifications(updated);
+    saveReadNotifications(updated);
     setUnreadCount(prev => Math.max(0, prev - 1));
   };
 
   const markAllAsRead = () => {
     const updated = notifications.map(notif => ({ ...notif, read: true }));
     setNotifications(updated);
-    saveNotifications(updated);
+    saveReadNotifications(updated);
     setUnreadCount(0);
   };
 
   const deleteNotification = (id) => {
     const updated = notifications.filter(notif => notif.id !== id);
     setNotifications(updated);
-    saveNotifications(updated);
     
     const notif = notifications.find(n => n.id === id);
     if (notif && !notif.read) {
@@ -252,13 +321,14 @@ const NotificationBell = () => {
                 <div className="p-3 border-t border-gray-700 bg-gray-750">
                   <button
                     onClick={() => {
-                      setNotifications([]);
+                      const updated = notifications.map(n => ({ ...n, read: true }));
+                      setNotifications(updated);
+                      saveReadNotifications(updated);
                       setUnreadCount(0);
-                      localStorage.removeItem('notifications');
                     }}
                     className="text-xs text-gray-400 hover:text-white transition-colors w-full text-center"
                   >
-                    Limpar todas as notificações
+                    Marcar todas como lidas
                   </button>
                 </div>
               )}

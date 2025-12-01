@@ -23,11 +23,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-blue-green p-4">
+    <div className="min-h-screen flex items-center justify-center gradient-yellow p-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary-blue rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">DS</span>
+          <div className="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-gray-900 font-bold text-2xl">DS</span>
           </div>
           <h1 className="text-3xl font-bold text-primary-black mb-2">
             Bem-vindo de volta!
@@ -64,7 +64,7 @@ const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-text-secondary">
             Não tem uma conta?{' '}
-            <Link to="/register" className="text-primary-blue font-medium hover:underline">
+            <Link to="/register" className="text-yellow-600 font-medium hover:underline">
               Cadastre-se
             </Link>
           </p>

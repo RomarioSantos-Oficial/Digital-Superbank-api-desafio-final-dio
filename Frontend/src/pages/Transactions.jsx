@@ -182,7 +182,7 @@ const Transactions = () => {
           <div className="space-y-2">
             {transactions.length > 0 ? (
               transactions.map((txn, idx) => (
-                <div key={idx} className="p-4 border border-gray-700 rounded-lg flex items-center justify-between bg-gray-700">
+                <div key={idx} className="p-4 border border-gray-700 rounded-lg flex items-center justify-between bg-gray-750">
                   <div>
                     <p className="font-medium text-white">{txn.transaction_type}</p>
                     <p className="text-sm text-gray-400">{formatDateTime(txn.created_at)}</p>

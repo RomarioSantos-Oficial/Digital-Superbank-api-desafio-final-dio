@@ -164,10 +164,19 @@ const Profile = () => {
   return (
     <DashboardLayout>
       <div className="space-y-6 max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold text-white">Meu Perfil</h1>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 bg-gray-700 hover:bg-yellow-500 hover:text-gray-900 rounded-lg text-white font-medium transition-colors flex items-center gap-2"
+          >
+            ← Voltar
+          </button>
+          <h1 className="text-3xl font-bold text-white">Meu Perfil</h1>
+        </div>
 
         {/* Dados Pessoais */}
-        <div className="space-y-6">\n          <Card>
+        <div className="space-y-6">
+          <Card>
             <h2 className="text-xl font-bold text-white mb-6">
               Informações Pessoais
             </h2>
@@ -420,33 +429,47 @@ const Profile = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {cards.map((card) => (
+              {cards.map((card) => {
+                console.log('Card CVV in Profile:', card.cvv); // Debug
+                const getBrandLogo = (brand) => {
+                  return <img src="/aura-logo.png" alt="Aura Plus" className="w-16 h-16 object-contain" />;
+                };
+                
+                return (
                 <Card key={card.id}>
                   <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg p-6 text-gray-900">
                     <div className="flex justify-between items-start mb-8">
-                      <IoCard className="w-12 h-12" />
-                      <p className="text-sm font-medium">
-                        {card.card_category || 'Cartão de Crédito'}
-                      </p>
+                      <div className="flex flex-col gap-2">
+                        <span className="text-sm font-medium">Digital Superbank</span>
+                        <span className="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full w-fit">
+                          Débito/Crédito
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        {getBrandLogo(card.card_brand)}
+                      </div>
                     </div>
                     
                     <div className="mb-6">
-                      <p className="text-sm opacity-80 mb-1">Número do Cartão</p>
                       <p className="text-xl font-mono tracking-wider">
-                        •••• •••• •••• {card.card_number?.slice(-4)}
+                        {card.card_number}
                       </p>
                     </div>
 
                     <div className="flex justify-between items-end">
                       <div>
-                        <p className="text-xs opacity-80 mb-1">Titular</p>
-                        <p className="text-sm font-medium">{card.card_holder_name || user?.full_name}</p>
+                        <p className="text-xs opacity-80 mb-1">Nome</p>
+                        <p className="text-sm font-medium uppercase">{user?.full_name}</p>
                       </div>
                       <div className="text-right">
                         <p className="text-xs opacity-80 mb-1">Validade</p>
                         <p className="text-sm font-medium">
                           {card.expiry_date ? new Date(card.expiry_date).toLocaleDateString('pt-BR', { month: '2-digit', year: '2-digit' }) : '--/--'}
                         </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs opacity-80 mb-1">CVV</p>
+                        <p className="text-sm font-medium font-mono text-lg">{card.cvv || '***'}</p>
                       </div>
                     </div>
                   </div>
@@ -472,7 +495,8 @@ const Profile = () => {
                     </div>
                   </div>
                 </Card>
-              ))}
+              );
+              })}
             </div>
 
             {cards.length === 0 && (

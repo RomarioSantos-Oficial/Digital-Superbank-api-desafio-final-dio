@@ -151,21 +151,21 @@ def get_cards_by_account(db: Session, account_id: int) -> List[CreditCard]:
 
 
 def get_card_by_id(db: Session, card_id: int) -> Optional[CreditCard]:
-    #Buscar cartão por ID
+    # Buscar cartão por ID
     return db.query(CreditCard).filter(CreditCard.id == card_id).first()
 
 
 def block_card(db: Session, card_id: int) -> CreditCard:
-    #Bloquear cartão
+    # Bloquear cartão
     card = get_card_by_id(db, card_id)
     if not card:
         raise ValueError("Cartão não encontrado")
     
-    if card.status == "BLOCKED":
-        raise ValueError("Cartão já está bloqueado")
+    if card.status == "CANCELLED":
+        raise ValueError("Não é possível bloquear cartão cancelado")
     
+    # Permite bloquear mesmo se já estiver bloqueado
     card.status = "BLOCKED"
-    card.is_active = False
     card.updated_at = datetime.utcnow()
     
     db.commit()
@@ -175,20 +175,20 @@ def block_card(db: Session, card_id: int) -> CreditCard:
 
 
 def unblock_card(db: Session, card_id: int) -> CreditCard:
-    #Desbloquear cartão
+    # Desbloquear cartão
     card = get_card_by_id(db, card_id)
     if not card:
         raise ValueError("Cartão não encontrado")
     
-    if card.status != "BLOCKED":
-        raise ValueError("Cartão não está bloqueado")
+    if card.status == "CANCELLED":
+        raise ValueError("Não é possível desbloquear cartão cancelado")
     
     # Verifica se não está vencido
     if card.expiry_date < datetime.utcnow().date():
         raise ValueError("Não é possível desbloquear cartão vencido")
     
+    # Permite desbloquear mesmo se já estiver ativo
     card.status = "ACTIVE"
-    card.is_active = True
     card.updated_at = datetime.utcnow()
     
     db.commit()

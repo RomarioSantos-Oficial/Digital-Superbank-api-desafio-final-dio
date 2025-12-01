@@ -7,6 +7,8 @@ import sys
 import os
 from datetime import datetime
 import random
+import argparse
+import shutil
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -118,8 +120,16 @@ def generate_funds():
         # Salva no arquivo fundo_investimento.txt
         arquivo_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            'demo',
             'fundo_investimento.txt'
         )
+        
+        # Verifica se arquivo existe e cria backup
+        if os.path.exists(arquivo_path):
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            backup_path = arquivo_path.replace('.txt', f'_backup_{timestamp}.txt')
+            shutil.copy2(arquivo_path, backup_path)
+            print(f"📦 Backup criado: {backup_path}")
         
         with open(arquivo_path, 'w', encoding='utf-8') as f:
             f.write("═" * 80 + "\n")
@@ -234,4 +244,37 @@ def generate_funds():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Gera fundos imobiliários para investimento'
+    )
+    parser.add_argument(
+        '--update',
+        action='store_true',
+        help='Atualiza arquivo existente (cria backup automático)'
+    )
+    args = parser.parse_args()
+    
+    # Verifica se arquivo já existe
+    arquivo_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+        'demo',
+        'fundo_investimento.txt'
+    )
+    
+    if os.path.exists(arquivo_path) and not args.update:
+        print("="*70)
+        print("⚠️  ARQUIVO JÁ EXISTE: fundo_investimento.txt")
+        print("="*70)
+        print()
+        print("Para evitar perda de dados, o arquivo NÃO será sobrescrito.")
+        print()
+        print("Opções:")
+        print("  1. Execute com --update para sobrescrever (backup será criado)")
+        print("  2. Renomeie o arquivo atual manualmente")
+        print("  3. Delete o arquivo atual se não precisar dele")
+        print()
+        print("Comando: python generate_funds.py --update")
+        print("="*70)
+        sys.exit(0)
+    
     generate_funds()

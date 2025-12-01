@@ -277,6 +277,7 @@ def generate_varied_users():
         # Atualiza arquivo pessoa.txt
         arquivo_path = os.path.join(
             os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+            'demo',
             'pessoa.txt'
         )
         

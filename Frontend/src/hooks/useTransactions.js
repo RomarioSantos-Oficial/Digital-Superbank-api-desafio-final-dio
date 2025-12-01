@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import * as transactionService from '../services/transaction.service';
 import toast from 'react-hot-toast';
+import { createTransactionNotification } from '../utils/notificationHelper';
 
 export const useTransactions = () => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,10 @@ export const useTransactions = () => {
     try {
       const result = await transactionService.deposit(depositData);
       toast.success('Depósito realizado com sucesso!');
+      
+      // Criar notificação
+      setTimeout(() => window.location.reload(), 500);
+      
       return { success: true, data: result };
     } catch (error) {
       toast.error(error.message || 'Erro ao realizar depósito');
@@ -25,6 +30,10 @@ export const useTransactions = () => {
     try {
       const result = await transactionService.withdraw(withdrawData);
       toast.success('Saque realizado com sucesso!');
+      
+      // Recarregar para atualizar notificações
+      setTimeout(() => window.location.reload(), 500);
+      
       return { success: true, data: result };
     } catch (error) {
       toast.error(error.message || 'Erro ao realizar saque');
@@ -39,6 +48,10 @@ export const useTransactions = () => {
     try {
       const result = await transactionService.transfer(transferData);
       toast.success('Transferência realizada com sucesso!');
+      
+      // Recarregar para atualizar notificações
+      setTimeout(() => window.location.reload(), 500);
+      
       return { success: true, data: result };
     } catch (error) {
       toast.error(error.message || 'Erro ao realizar transferência');
@@ -53,6 +66,10 @@ export const useTransactions = () => {
     try {
       const result = await transactionService.sendPix(pixData);
       toast.success('PIX enviado com sucesso!');
+      
+      // Recarregar para atualizar notificações
+      setTimeout(() => window.location.reload(), 500);
+      
       return { success: true, data: result };
     } catch (error) {
       toast.error(error.message || 'Erro ao enviar PIX');
@@ -67,6 +84,10 @@ export const useTransactions = () => {
     try {
       const result = await transactionService.payBill(billData);
       toast.success('Boleto pago com sucesso!');
+      
+      // Recarregar para atualizar notificações
+      setTimeout(() => window.location.reload(), 500);
+      
       return { success: true, data: result };
     } catch (error) {
       toast.error(error.message || 'Erro ao pagar boleto');

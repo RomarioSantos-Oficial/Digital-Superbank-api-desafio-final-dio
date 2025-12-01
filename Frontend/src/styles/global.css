@@ -38,19 +38,19 @@
   }
 
   .btn-primary {
-    @apply bg-primary-blue text-white hover:bg-secondary-blue hover:shadow-lg;
+    @apply bg-yellow-500 text-gray-900 hover:bg-yellow-600 hover:shadow-lg;
   }
 
   .btn-secondary {
-    @apply bg-white text-primary-blue border border-primary-blue hover:bg-light-blue;
+    @apply bg-gray-700 text-white border border-gray-600 hover:bg-gray-600;
   }
 
   .btn-success {
-    @apply bg-primary-green text-white hover:bg-secondary-green hover:shadow-lg;
+    @apply bg-green-600 text-white hover:bg-green-700 hover:shadow-lg;
   }
 
   .btn-danger {
-    @apply bg-error text-white hover:bg-red-600 hover:shadow-lg;
+    @apply bg-red-600 text-white hover:bg-red-700 hover:shadow-lg;
   }
 
   .card {
@@ -67,8 +67,8 @@
 }
 
 @layer utilities {
-  .gradient-blue-green {
-    background: linear-gradient(135deg, #0066FF 0%, #00D68F 100%);
+  .gradient-yellow {
+    background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
   }
 
   .gradient-dark {

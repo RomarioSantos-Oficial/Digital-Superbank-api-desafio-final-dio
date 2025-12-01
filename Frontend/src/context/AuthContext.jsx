@@ -1,10 +1,19 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import { STORAGE_KEYS } from '../utils/constants';
 import { storage } from '../utils/helpers';
 import * as authService from '../services/auth.service';
 import toast from 'react-hot-toast';
 
 export const AuthContext = createContext();
+
+// Hook personalizado para usar o contexto
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth deve ser usado dentro de um AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

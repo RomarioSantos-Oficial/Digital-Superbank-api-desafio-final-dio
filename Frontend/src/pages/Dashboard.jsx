@@ -86,7 +86,7 @@ const Dashboard = () => {
                   {accounts.length}
                 </p>
               </div>
-              <IoBusiness className="w-12 h-12 text-yellow-500 opacity-30" />
+              <IoBusiness className="w-12 h-12 text-gray-600 opacity-30" />
             </div>
           </Card>
 
@@ -130,7 +130,7 @@ const Dashboard = () => {
               {accounts.map((account) => (
                 <div
                   key={account.id}
-                  className="p-4 border border-gray-700 rounded-lg hover:border-yellow-500 transition-colors bg-gray-800">
+                  className="p-4 border border-gray-700 rounded-lg hover:border-yellow-500 transition-colors bg-gray-750">
                   <div className="mb-3">
                     <p className="text-xs text-gray-500 mb-1">Tipo</p>
                     <p className="text-lg font-bold text-white">
@@ -146,7 +146,7 @@ const Dashboard = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-xs text-gray-500 mb-1">Saldo Disponível</p>
-                      <p className="text-2xl font-bold text-blue-400">
+                      <p className="text-2xl font-bold text-yellow-500">
                         {formatCurrency(account.balance)}
                       </p>
                     </div>
@@ -171,7 +171,7 @@ const Dashboard = () => {
               <button
                 key={action}
                 onClick={() => handleQuickAction(action)}
-                className="p-4 bg-gray-700 hover:bg-yellow-500 hover:text-gray-900 rounded-lg text-yellow-500 font-medium transition-colors"
+                className="p-4 bg-gray-700 hover:bg-yellow-500 hover:text-gray-900 rounded-lg text-white font-medium transition-colors"
               >
                 {action}
               </button>

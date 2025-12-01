@@ -17,18 +17,26 @@ const FloatingChatbot = () => {
   
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    // Recupera mensagens do localStorage ao iniciar
+    const saved = localStorage.getItem('luna_messages');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [sessionId, setSessionId] = useState(() => {
     // Recupera sessionId do localStorage ao iniciar
     return localStorage.getItem('luna_session_id') || null;
   });
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState(() => {
+    // Recupera sugestões do localStorage
+    const saved = localStorage.getItem('luna_suggestions');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [userAccounts, setUserAccounts] = useState([]);
   const [userPortfolio, setUserPortfolio] = useState(null);
   const messagesEndRef = useRef(null);
-  const hasLoadedHistory = useRef(false); // Usa ref em vez de state para não causar re-render
+  const hasLoadedHistory = useRef(false);
   
   // Salva sessionId no localStorage quando mudar
   useEffect(() => {
@@ -36,6 +44,20 @@ const FloatingChatbot = () => {
       localStorage.setItem('luna_session_id', sessionId);
     }
   }, [sessionId]);
+  
+  // Salva mensagens no localStorage quando mudarem
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem('luna_messages', JSON.stringify(messages));
+    }
+  }, [messages]);
+  
+  // Salva sugestões no localStorage quando mudarem
+  useEffect(() => {
+    if (suggestions.length > 0) {
+      localStorage.setItem('luna_suggestions', JSON.stringify(suggestions));
+    }
+  }, [suggestions]);
   
   // Verifica se usuário está logado
   useEffect(() => {
@@ -78,7 +100,13 @@ const FloatingChatbot = () => {
   };
 
   const initializeChat = async () => {
-    // Se já tem sessionId, tenta carregar histórico
+    // Se já tem mensagens no localStorage, não precisa carregar do banco
+    if (messages.length > 0) {
+      hasLoadedHistory.current = true;
+      return;
+    }
+    
+    // Se já tem sessionId, tenta carregar histórico do banco
     if (sessionId) {
       try {
         const history = await chatbotService.getChatHistory(sessionId);
@@ -95,13 +123,13 @@ const FloatingChatbot = () => {
           }));
           
           setMessages(loadedMessages);
-          hasLoadedHistory.current = true; // Marca como carregado usando ref
+          hasLoadedHistory.current = true;
           
           // Carrega sugestões
           const popularQuestions = await chatbotService.getPopularQuestions(8);
           setSuggestions(popularQuestions);
           
-          return; // Sai da função se carregou histórico
+          return;
         }
       } catch (error) {
         console.error('Erro ao carregar histórico:', error);
@@ -123,7 +151,7 @@ const FloatingChatbot = () => {
       }
     ]);
     
-    hasLoadedHistory.current = true; // Marca como carregado mesmo sendo nova sessão
+    hasLoadedHistory.current = true;
 
     // Carregar sugestões
     try {
@@ -154,6 +182,85 @@ const FloatingChatbot = () => {
 
   const processUserCommand = async (messageText) => {
     const lowerMessage = messageText.toLowerCase();
+    
+    // Comandos de navegação - detecta pedidos para abrir páginas
+    const navigationCommands = {
+      'abrir investimentos': '/investments',
+      'abra investimentos': '/investments',
+      'abre investimentos': '/investments',
+      'página de investimentos': '/investments',
+      'pagina de investimentos': '/investments',
+      'ir para investimentos': '/investments',
+      'quero investir': '/investments',
+      
+      'abrir transações': '/transactions',
+      'abra transações': '/transactions',
+      'abrir transacoes': '/transactions',
+      'página de transações': '/transactions',
+      'fazer pix': '/transactions',
+      'enviar pix': '/transactions',
+      'transferir': '/transactions',
+      'transferência': '/transactions',
+      'transferencia': '/transactions',
+      
+      'abrir contas': '/accounts',
+      'abra contas': '/accounts',
+      'minhas contas': '/accounts',
+      'ver contas': '/accounts',
+      'página de contas': '/accounts',
+      
+      'abrir extrato': '/statement',
+      'abra extrato': '/statement',
+      'ver extrato': '/statement',
+      'meu extrato': '/statement',
+      'histórico': '/statement',
+      'historico': '/statement',
+      
+      'abrir cartões': '/cards',
+      'abra cartões': '/cards',
+      'abrir cartoes': '/cards',
+      'meus cartões': '/cards',
+      'meus cartoes': '/cards',
+      'cartão': '/cards',
+      'cartao': '/cards',
+      
+      'abrir perfil': '/profile',
+      'abra perfil': '/profile',
+      'meu perfil': '/profile',
+      'meus dados': '/profile',
+      'configurações': '/profile',
+      'configuracoes': '/profile',
+      
+      'abrir pagamentos': '/pay-bills',
+      'abra pagamentos': '/pay-bills',
+      'pagar conta': '/pay-bills',
+      'pagar boleto': '/pay-bills',
+      'boleto': '/pay-bills',
+      'contas a pagar': '/pay-bills'
+    };
+    
+    // Verifica comandos de navegação primeiro
+    for (const [command, route] of Object.entries(navigationCommands)) {
+      if (lowerMessage.includes(command)) {
+        const pageNames = {
+          '/pay-bills': 'pagamentos',
+          '/transactions': 'transações',
+          '/statement': 'extrato',
+          '/investments': 'investimentos',
+          '/cards': 'cartões',
+          '/profile': 'perfil',
+          '/accounts': 'contas'
+        };
+        
+        return {
+          response: `Abrindo ${pageNames[route]} para você! ✨`,
+          confidence: 1.0,
+          intent: 'navegar',
+          action: 'navigate',
+          navigation: route
+        };
+      }
+    }
     
     // Comandos de saldo
     if (lowerMessage.includes('saldo') || lowerMessage.includes('quanto tenho')) {
@@ -195,56 +302,6 @@ const FloatingChatbot = () => {
       };
     }
     
-    // Comandos de navegação
-    const navigationCommands = {
-      'pagar conta': '/pay-bills',
-      'pagar contas': '/pay-bills',
-      'pagamento': '/pay-bills',
-      'boleto': '/pay-bills',
-      'fazer pix': '/transactions',
-      'pix': '/transactions',
-      'transferir': '/transactions',
-      'transferência': '/transactions',
-      'transferencia': '/transactions',
-      'extrato': '/statement',
-      'histórico': '/statement',
-      'historico': '/statement',
-      'investir': '/investments',
-      'comprar ação': '/investments',
-      'comprar acao': '/investments',
-      'cartão': '/cards',
-      'cartao': '/cards',
-      'perfil': '/profile',
-      'meus dados': '/profile',
-      'configurações': '/profile',
-      'configuracoes': '/profile',
-      'contas': '/accounts',
-      'conta': '/accounts',
-      'minhas contas': '/accounts'
-    };
-    
-    for (const [command, route] of Object.entries(navigationCommands)) {
-      if (lowerMessage.includes(command)) {
-        const pageNames = {
-          '/pay-bills': 'pagamentos',
-          '/transactions': 'transações',
-          '/statement': 'extrato',
-          '/investments': 'investimentos',
-          '/cards': 'cartões',
-          '/profile': 'perfil',
-          '/accounts': 'contas'
-        };
-        
-        return {
-          response: `Abrindo ${pageNames[route]} para você! ✨`,
-          confidence: 1.0,
-          intent: 'navegar',
-          action: 'navigate',
-          navigation: route
-        };
-      }
-    }
-    
     return null;
   };
 
@@ -268,8 +325,8 @@ const FloatingChatbot = () => {
       const customResponse = await processUserCommand(messageText);
       
       if (customResponse) {
-        // Adiciona um delay para simular "pensamento"
-        await new Promise(resolve => setTimeout(resolve, 800));
+        // Simula digitação - espera 3 segundos
+        await new Promise(resolve => setTimeout(resolve, 3000));
         
         const botMessage = {
           id: Date.now() + 1,
@@ -289,7 +346,7 @@ const FloatingChatbot = () => {
         if (customResponse.action === 'navigate' && customResponse.navigation) {
           setTimeout(() => {
             navigate(customResponse.navigation);
-            setIsMinimized(true); // Minimiza o chat
+            setIsMinimized(true);
           }, 1500);
         }
         
@@ -297,6 +354,9 @@ const FloatingChatbot = () => {
       }
       
       // Se não for comando personalizado, usa a API do chatbot
+      // Simula digitação - espera 3 segundos
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
       const response = await chatbotService.sendMessage(messageText, sessionId);
 
       const botMessage = {
@@ -306,12 +366,12 @@ const FloatingChatbot = () => {
         timestamp: new Date(),
         confidence: response.confidence,
         intent: response.intent,
-        messageId: response.message_id // Para feedback
+        messageId: response.message_id
       };
 
       setMessages(prev => [...prev, botMessage]);
       
-      // Atualizar session_id (sempre atualiza se vier da API)
+      // Atualizar session_id
       if (response.session_id) {
         setSessionId(response.session_id);
       }
@@ -346,9 +406,12 @@ const FloatingChatbot = () => {
     setMessages([]);
     setSessionId(null);
     setSuggestions([]);
-    hasLoadedHistory.current = false; // Reseta ref para permitir novo carregamento
-    localStorage.removeItem('luna_session_id'); // Remove sessão do localStorage
-    loadUserData(); // Recarrega dados do usuário
+    hasLoadedHistory.current = false;
+    // Limpa todos os dados do localStorage
+    localStorage.removeItem('luna_session_id');
+    localStorage.removeItem('luna_messages');
+    localStorage.removeItem('luna_suggestions');
+    loadUserData();
     initializeChat();
     toast.success('Conversa reiniciada');
   };

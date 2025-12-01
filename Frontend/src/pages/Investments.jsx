@@ -213,7 +213,7 @@ const Investments = () => {
                   </div>
 
                   <div>
-                    <p className="text-2xl font-bold text-blue-400">
+                    <p className="text-2xl font-bold text-yellow-500">
                       {formatCurrency(asset.current_price)}
                     </p>
                     <p className={`text-sm font-medium ${asset.change_percent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -227,7 +227,7 @@ const Investments = () => {
                       variant="primary"
                       size="small"
                       onClick={() => navigate(`/trading-dashboard/${asset.id}`)}
-                      className="flex items-center gap-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                      className="flex items-center gap-1"
                     >
                       <IoRocket />
                       Negociar
@@ -280,7 +280,7 @@ const Investments = () => {
                   </div>
 
                   <div>
-                    <p className="text-2xl font-bold text-blue-400">
+                    <p className="text-2xl font-bold text-yellow-500">
                       {formatCurrency(asset.current_price)}
                     </p>
                     <p className={`text-sm font-medium ${asset.change_percent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
@@ -335,7 +335,7 @@ const Investments = () => {
                         </div>
                         <div key="current-price">
                           <p className="text-xs text-gray-500 mb-1">Preço Atual</p>
-                          <p className="text-lg font-bold text-blue-400">
+                          <p className="text-lg font-bold text-yellow-500">
                             {formatCurrency(item.current_price)}
                           </p>
                         </div>
@@ -407,7 +407,7 @@ const Investments = () => {
                         </div>
                         <div key="current-price">
                           <p className="text-xs text-gray-500 mb-1">Preço Atual</p>
-                          <p className="text-lg font-bold text-blue-400">
+                          <p className="text-lg font-bold text-yellow-500">
                             {formatCurrency(item.current_price)}
                           </p>
                         </div>
@@ -468,7 +468,7 @@ const Investments = () => {
               <p className="text-sm text-gray-400">Ativo</p>
               <p className="text-lg font-bold text-white">{selectedAsset.symbol}</p>
               <p className="text-sm text-gray-400">{selectedAsset.name}</p>
-              <p className="text-xl font-bold text-blue-400 mt-2">
+              <p className="text-xl font-bold text-yellow-500 mt-2">
                 {formatCurrency(selectedAsset.current_price)}
               </p>
             </div>

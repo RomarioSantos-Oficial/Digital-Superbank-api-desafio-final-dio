@@ -187,7 +187,7 @@ const Statement = () => {
           </div>
           <button
             onClick={exportStatement}
-            className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-gray-900 rounded-lg hover:bg-yellow-600 transition-colors font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white hover:bg-yellow-500 hover:text-gray-900 rounded-lg transition-colors font-medium"
           >
             <IoDownloadOutline className="w-5 h-5" />
             Exportar
